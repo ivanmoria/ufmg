@@ -40,18 +40,9 @@ function ttePulse() {
   }
   _tteCount++;
 
-  // Visual feedback
-  const btn = document.getElementById('tte-pulse-btn');
-  if (btn) {
-    btn.style.transform = 'scale(0.92)';
-    btn.style.background = 'var(--accent)';
-    btn.style.color = '#fff';
-    setTimeout(() => {
-      btn.style.transform = '';
-      btn.style.background = 'var(--accent-bg)';
-      btn.style.color = 'var(--accent)';
-    }, 100);
-  }
+  // Visual feedback via CSS class (mais rápido — definida no novo bloco abaixo)
+  document.getElementById('tte-pulse-btn')?.classList.add('pressed');
+  setTimeout(() => document.getElementById('tte-pulse-btn')?.classList.remove('pressed'), 100);
 
   const countEl = document.getElementById('tte-count');
   const totalEl = document.getElementById('tte-total');
@@ -257,6 +248,117 @@ function tteExportCSV() {
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
   if (typeof notify === 'function') notify('✓ TTE exportado');
+}
+
+// ── Separação touch/mouse para evitar duplo disparo ──────────
+// No mobile, ontouchstart dispara ttePulseMobile e o onclick
+// seria chamado em seguida — bloqueamos com flag.
+let _lastTouchTime = 0;
+
+function ttePulseMobile(e) {
+  e.preventDefault(); // bloqueia click subsequente e zoom
+  _lastTouchTime = Date.now();
+  ttePulse();
+}
+
+function ttePulseDesktop(e) {
+  // Se veio de touch (< 500ms atrás), ignora o click sintético
+  if (Date.now() - _lastTouchTime < 500) return;
+  ttePulse();
+}
+
+// ── Tela de setup mobile ──────────────────────────────────────
+function tteStartSession() {
+  const setup = document.getElementById('tte-setup-screen');
+  const panel = document.getElementById('rtest-tte');
+  if (setup) setup.style.display = 'none';
+  if (panel) { panel.style.display = 'flex'; panel.style.flexDirection = 'column'; }
+  // Atualiza total no contador
+  const totalEl = document.getElementById('tte-total');
+  if (totalEl) totalEl.textContent = tteGetN();
+}
+
+// ── Live IOI display ──────────────────────────────────────────
+function tteUpdateLiveIOI() {
+  const el = document.getElementById('tte-last-ioi');
+  if (!el || _tteBeatTimes.length < 2) return;
+  const last = _tteBeatTimes[_tteBeatTimes.length - 1];
+  const prev = _tteBeatTimes[_tteBeatTimes.length - 2];
+  el.textContent = last - prev;
+}
+
+// ── Override ttePulse para incluir live IOI ───────────────────
+const _ttePulseOrig = ttePulse;
+// Patch: já está definida acima, então apenas adicionamos o live IOI no fim
+const _ttePulsePatched = ttePulse;
+// Substituímos a referência global
+window.ttePulse = function() {
+  _ttePulsePatched();
+  tteUpdateLiveIOI();
+};
+// Reaponta as funções que chamam ttePulse diretamente via string onclick
+function ttePulse() {
+  if (_tteDone) return;
+  const now = Date.now();
+  const N   = tteGetN();
+
+  if (_tteCount === 0) {
+    _tteStartTime = now;
+    _tteBeatTimes = [0];
+  } else {
+    _tteBeatTimes.push(now - _tteStartTime);
+  }
+  _tteCount++;
+
+  // Visual feedback via classe CSS (mais rápido que style inline)
+  const btn = document.getElementById('tte-pulse-btn');
+  if (btn) {
+    btn.classList.add('pressed');
+    setTimeout(() => btn.classList.remove('pressed'), 100);
+  }
+
+  const countEl = document.getElementById('tte-count');
+  const totalEl = document.getElementById('tte-total');
+  if (countEl) countEl.textContent = _tteCount;
+  if (totalEl) totalEl.textContent = N;
+
+  tteUpdateLiveIOI();
+
+  if (_tteCount >= N) {
+    _tteDone = true;
+    tteFinish();
+  }
+}
+
+// Override tteReset para voltar à tela de setup no mobile
+const _tteResetOrig = tteReset;
+window.tteReset = function() {
+  _tteCount = 0; _tteStartTime = null; _tteBeatTimes = []; _tteDone = false;
+  if (_tteChart) { _tteChart.destroy(); _tteChart = null; }
+  const btn = document.getElementById('tte-pulse-btn');
+  if (btn) { btn.disabled = false; btn.style.opacity = ''; btn.classList.remove('pressed'); }
+  const countEl = document.getElementById('tte-count');
+  if (countEl) countEl.textContent = '0';
+  const results = document.getElementById('tte-results');
+  if (results) results.style.display = 'none';
+  const exportBtn = document.getElementById('tte-export-btn');
+  if (exportBtn) exportBtn.disabled = true;
+  const liveEl = document.getElementById('tte-last-ioi');
+  if (liveEl) liveEl.textContent = '—';
+
+  // Volta para setup no mobile
+  if (window.innerWidth <= 700) {
+    const setup = document.getElementById('tte-setup-screen');
+    const panel = document.getElementById('rtest-tte');
+    if (setup) setup.style.display = 'flex';
+    if (panel) panel.style.display = 'none';
+  }
+};
+
+// No desktop, mostra o painel direto (sem tela de setup)
+if (window.innerWidth > 700) {
+  const panel = document.getElementById('rtest-tte');
+  if (panel) { panel.style.display = 'flex'; panel.style.flexDirection = 'column'; }
 }
 
 // Spacebar shortcut when on ritmic tab

@@ -1,0 +1,969 @@
+/* ══════════════════════════════════════════════════════════
+   T-MIRIM — mobile.css
+   CSS mobile-first adicional. Importado APÓS app.css.
+   Não altera lógica JS nem estrutura HTML existente.
+══════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────
+   1. VARIÁVEIS MOBILE
+────────────────────────────────────────── */
+:root {
+  --mobile-bottom-nav-h: 62px;
+  --mobile-header-h:     52px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top:    env(safe-area-inset-top, 0px);
+}
+
+/* ──────────────────────────────────────────
+   2. MOBILE HEADER (aparece só no mobile)
+────────────────────────────────────────── */
+.mobile-header,
+.mobile-drawer,
+.mobile-drawer-overlay,
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: var(--mobile-header-h);
+    padding: 0 14px;
+    padding-top: var(--safe-top);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+
+  .mobile-header__hamburger {
+    width: 38px; height: 38px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 5px; flex-shrink: 0;
+    background: none; border: none; cursor: pointer;
+    border-radius: 8px;
+    transition: background .15s;
+  }
+  .mobile-header__hamburger:hover { background: var(--panel); }
+  .mobile-header__hamburger span {
+    display: block; width: 20px; height: 2px;
+    background: var(--textdim); border-radius: 2px;
+    transition: transform .25s, opacity .25s;
+  }
+  /* Hamburguer → X quando drawer aberto */
+  body.drawer-open .mobile-header__hamburger span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  body.drawer-open .mobile-header__hamburger span:nth-child(2) {
+    opacity: 0;
+  }
+  body.drawer-open .mobile-header__hamburger span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .mobile-header__title {
+    flex: 1;
+    font-family: var(--display);
+    font-size: 1rem; font-weight: 800;
+    color: var(--text);
+    letter-spacing: .5px;
+  }
+
+  .mobile-header__actions {
+    display: flex; gap: 4px; align-items: center;
+  }
+
+  /* Esconde a sidenav padrão no mobile */
+  .sidenav { display: none !important; }
+
+  /* App vira coluna (stacked) */
+  .app {
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  /* Main ocupa o espaço restante */
+  .main {
+    flex: 1;
+    height: 0; /* força o flex a funcionar */
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Pages roláveis verticalmente, com padding para o bottom nav */
+  .page {
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+    padding: 12px 12px calc(var(--mobile-bottom-nav-h) + var(--safe-bottom) + 8px);
+  }
+
+  /* Página visualize (sem padding lateral) */
+  #page-visualize.active {
+    padding: 0 0 calc(var(--mobile-bottom-nav-h) + var(--safe-bottom));
+  }
+  #page-forms {
+    padding: 14px 14px calc(var(--mobile-bottom-nav-h) + var(--safe-bottom) + 8px);
+  }
+}
+
+/* ──────────────────────────────────────────
+   3. DRAWER (sidenav como overlay no mobile)
+────────────────────────────────────────── */
+@media (max-width: 700px) {
+
+  /* Overlay escuro */
+  .mobile-drawer-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 299;
+    opacity: 0;
+    transition: opacity .25s;
+  }
+  body.drawer-open .mobile-drawer-overlay {
+    display: block;
+    opacity: 1;
+  }
+
+  /* Drawer em si */
+  .mobile-drawer {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 270px; max-width: 82vw;
+    background: var(--surface);
+    border-right: 1px solid var(--border2);
+    z-index: 300;
+    transform: translateX(-100%);
+    transition: transform .28s cubic-bezier(.4,0,.2,1);
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+    padding-top: var(--safe-top);
+    box-shadow: 4px 0 24px rgba(0,0,0,.3);
+  }
+  body.drawer-open .mobile-drawer {
+    transform: translateX(0);
+  }
+
+  /* Cabeçalho do drawer */
+  .mobile-drawer__header {
+    padding: 20px 16px 14px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  /* Nav do drawer — reusa os tab-btn existentes */
+  .mobile-drawer__nav {
+    flex: 1;
+    padding: 8px;
+    display: flex; flex-direction: column; gap: 2px;
+    overflow-y: auto;
+  }
+  .mobile-drawer__nav .tab-group-label {
+    display: block !important;
+    font-size: .6rem; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--textsub);
+    padding: 10px 8px 4px;
+  }
+  .mobile-drawer__nav .tab-btn {
+    display: flex !important;
+    align-items: center; gap: 10px;
+    padding: 11px 12px;
+    border-radius: 8px;
+    font-size: .9rem;
+  }
+  .mobile-drawer__nav .tab-btn .tab-label {
+    display: inline !important;
+  }
+
+  /* Footer drawer */
+  .mobile-drawer__footer {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex; gap: 6px; flex-wrap: wrap;
+    flex-shrink: 0;
+    padding-bottom: calc(12px + var(--safe-bottom));
+  }
+  .mobile-drawer__footer .hdr-btn {
+    flex: 1; min-width: 36px; height: 36px;
+  }
+}
+
+/* ──────────────────────────────────────────
+   4. BOTTOM NAVIGATION BAR
+────────────────────────────────────────── */
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: calc(var(--mobile-bottom-nav-h) + var(--safe-bottom));
+    padding-bottom: var(--safe-bottom);
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    z-index: 150;
+    box-shadow: 0 -2px 16px rgba(0,0,0,.2);
+  }
+
+  .mobile-bottom-nav__item {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 3px;
+    background: none; border: none; cursor: pointer;
+    color: var(--textdim);
+    font-family: var(--sans);
+    font-size: .68rem; font-weight: 600;
+    transition: color .15s, transform .1s;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    padding: 0;
+  }
+  .mobile-bottom-nav__item:active {
+    transform: scale(0.92);
+  }
+  .mobile-bottom-nav__item.active {
+    color: var(--accent);
+  }
+  .mobile-bottom-nav__item.active::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 20%; right: 20%;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 0 0 2px 2px;
+  }
+
+  .mobile-bottom-nav__icon {
+    font-size: 1.3rem;
+    line-height: 1;
+  }
+
+  .mobile-bottom-nav__label {
+    font-size: .62rem;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  /* Badge sobre ícone */
+  .mobile-bottom-nav__badge {
+    display: none;
+    position: absolute;
+    top: 6px; right: calc(50% - 18px);
+    min-width: 16px; height: 16px;
+    background: var(--accent2); color: #fff;
+    font-size: .55rem; font-weight: 800;
+    border-radius: 999px; padding: 0 4px;
+    align-items: center; justify-content: center;
+    border: 2px solid var(--surface);
+  }
+  .mobile-bottom-nav__badge.show { display: flex; }
+}
+
+/* ──────────────────────────────────────────
+   5. AJUSTES GERAIS MOBILE
+────────────────────────────────────────── */
+@media (max-width: 700px) {
+
+  /* Cards em coluna única */
+  .row { flex-direction: column; }
+  .row > * { max-width: 100% !important; min-width: 0 !important; }
+
+  /* Stat cards em grid 2×2 */
+  .row.stats-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .row.stats-row .stat-card {
+    flex: 1; min-width: calc(50% - 6px);
+  }
+
+  /* Tabelas: scroll horizontal */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .part-grid-wrap { max-height: 260px; }
+  table { min-width: 500px; }
+
+  /* Botões: touch targets maiores */
+  .btn { padding: 10px 16px; font-size: .9rem; min-height: 42px; }
+  .btn.sm, .btn[class*="sm"] { padding: 7px 12px; font-size: .82rem; min-height: 36px; }
+
+  /* Toggle buttons */
+  .toggle-btn, .tbtn { padding: 8px 12px; font-size: .82rem; min-height: 36px; }
+
+  /* Inputs maiores para touch */
+  input[type=text], input[type=number], select, textarea {
+    padding: 10px 12px;
+    font-size: .92rem;
+    min-height: 42px;
+  }
+
+  /* Drop zone */
+  .drop-zone { padding: 28px 16px; }
+  .drop-zone .dz-icon { font-size: 2.5rem; }
+
+  /* Cards de participante */
+  .part-cards-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  /* Analysis text */
+  .analysis-text { max-height: 36vh; }
+
+  /* Notificação: posição mobile-friendly */
+  .notif {
+    bottom: calc(var(--mobile-bottom-nav-h) + var(--safe-bottom) + 10px);
+    left: 12px; right: 12px;
+    text-align: center;
+  }
+
+  /* Modal participante: full screen no mobile */
+  #part-detail-panel {
+    width: 100vw; max-width: 100vw;
+    max-height: 90vh;
+    border-radius: 16px 16px 0 0;
+    padding: 20px 16px 16px;
+    margin: auto 0 0;
+  }
+  #part-detail-overlay { align-items: flex-end; }
+
+  /* Viz page toolbar: scroll horizontal */
+  #viz-topbar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .viz-topbar-section { flex-shrink: 0; }
+
+  /* Options panel: wrap vertical */
+  #viz-options-panel { flex-direction: column; }
+  .viz-opt-group { min-width: 0; width: 100%; }
+  .viz-row-2col { grid-template-columns: 1fr; }
+
+  /* DASS question box */
+  .dass-qbox {
+    font-size: 1rem;
+    padding: 18px 14px;
+    min-height: auto;
+  }
+
+  /* Form grids colapsa */
+  .form-grid-2,
+  .form-grid-3 { grid-template-columns: 1fr !important; }
+
+  /* opts-grid no viz */
+  .opts-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Espaço extra para o bottom nav nas páginas com posição fixed interna */
+  .viz-plots {
+    padding-bottom: calc(var(--mobile-bottom-nav-h) + var(--safe-bottom) + 8px);
+  }
+}
+
+/* ──────────────────────────────────────────
+   480px — telas muito pequenas
+────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .part-cards-grid { grid-template-columns: 1fr; }
+  .opts-grid { grid-template-columns: 1fr 1fr; }
+
+  .mobile-bottom-nav__label { display: none; }
+  .mobile-bottom-nav {
+    height: calc(54px + var(--safe-bottom));
+  }
+  .mobile-bottom-nav__icon { font-size: 1.5rem; }
+
+  #part-detail-panel h2 { font-size: 1.2rem; }
+  .pd-kpi { min-width: 80px; }
+}
+
+/* ──────────────────────────────────────────
+   6. TESTES RÍTMICOS — MOBILE
+────────────────────────────────────────── */
+
+/* Setup screen: preenche a tela no mobile */
+#tte-setup-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ritmic-subtests {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.ritmic-subtests .toggle-btn {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  justify-content: center;
+}
+
+/* Desktop: layout lateral original */
+@media (min-width: 701px) {
+  #page-ritmic {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  #tte-setup-screen {
+    min-width: 220px;
+    max-width: 260px;
+  }
+  #rtest-tte {
+    flex: 1;
+    min-width: 0;
+  }
+  /* No desktop mostra o painel de tap direto (sem tela de início) */
+  #tte-setup-screen { display: flex !important; }
+  #rtest-tte        { display: flex !important; flex-direction: column; }
+  #tte-start-btn    { display: none !important; }
+
+  /* Botão desktop: círculo clássico */
+  #tte-pulse-btn {
+    width: 180px !important;
+    height: 180px !important;
+    border-radius: 50% !important;
+    font-size: .95rem !important;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .tte-btn-sub { font-size: .72rem; opacity: .7; }
+  .tte-tap-area { padding: 32px 20px; text-align: center; }
+  .tte-tap-info {
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .tte-ioi-live { margin-top: 16px; }
+}
+
+/* ── TAP AREA (área principal de toque) ── */
+.tte-tap-area {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 20px;
+}
+
+.tte-tap-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 12px;
+  font-family: var(--mono);
+  font-size: .9rem;
+  color: var(--textdim);
+}
+
+/* ── BOTÃO DE BATIDA ── */
+#tte-pulse-btn {
+  /* Previne zoom no double-tap — CRÍTICO para teste rítmico */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  background: var(--accent-bg);
+  border: 3px solid var(--accent);
+  color: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-weight: 800;
+  transition: background .06s, transform .06s, border-color .06s;
+
+  /* Desktop fallback size */
+  width: 180px;
+  height: 180px;
+}
+
+#tte-pulse-btn:active,
+#tte-pulse-btn.pressed {
+  background: var(--accent);
+  color: #fff;
+  transform: scale(0.93);
+}
+#tte-pulse-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+.tte-btn-icon  { font-size: 2rem; line-height: 1; }
+.tte-btn-label { font-size: .88rem; font-weight: 800; text-align: center; line-height: 1.2; }
+.tte-btn-sub   { font-size: .7rem; opacity: .6; }
+
+/* Live IOI feedback */
+.tte-ioi-live {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--mono);
+  margin-top: 12px;
+}
+.tte-ioi-live span:first-child {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent);
+  min-width: 80px;
+  text-align: center;
+}
+.tte-ioi-live small {
+  font-size: .68rem;
+  color: var(--textsub);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+/* ── MOBILE: botão enorme, tela cheia ── */
+@media (max-width: 700px) {
+  #page-ritmic {
+    padding: 12px 12px calc(var(--mobile-bottom-nav-h) + var(--safe-bottom) + 8px) !important;
+    overflow-y: auto;
+  }
+
+  /* Setup screen ocupa tela toda */
+  #tte-setup-screen {
+    min-height: calc(100dvh - var(--mobile-header-h) - var(--mobile-bottom-nav-h) - 32px);
+    justify-content: center;
+  }
+
+  /* Tap area: ocupa tudo durante o teste */
+  .tte-tap-area {
+    min-height: calc(100dvh - var(--mobile-header-h) - var(--mobile-bottom-nav-h) - 80px);
+    justify-content: space-between;
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  /* Botão: grande o suficiente para toque preciso, mas não enorme demais */
+  #tte-pulse-btn {
+    width: min(72vw, 300px) !important;
+    height: min(72vw, 300px) !important;
+    border-radius: 50% !important;
+    border-width: 4px;
+  }
+  .tte-btn-icon  { font-size: min(14vw, 64px); }
+  .tte-btn-label { font-size: min(4vw, 18px); }
+  .tte-btn-sub   { display: none; }
+
+  .tte-ioi-live span:first-child { font-size: 2rem; }
+}
+
+@media (max-width: 380px) {
+  #tte-pulse-btn {
+    width: 68vw !important;
+    height: 68vw !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   MELHORIAS MOBILE — RODADA 2
+══════════════════════════════════════════════════════════ */
+
+/* ── 1. ANALISAR: botões lado a lado ── */
+@media (max-width: 700px) {
+  #page-analyze .card > .row:first-child {
+    gap: 6px;
+  }
+  #page-analyze [data-abt] {
+    flex: 1;
+    min-width: 0;
+    font-size: .72rem;
+    padding: 7px 4px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* "Relatório Individual" → "Individual" etc via ::before trick não é possível sem JS,
+     mas reduzindo fonte e padding já cabe */
+  #page-analyze .card > .row:first-child {
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  #page-analyze .card > .row:first-child > div:last-child {
+    flex-shrink: 0;
+    margin-left: 0;
+  }
+  #page-analyze #btn-export-analysis,
+  #page-analyze #btn-export-analysis-xl {
+    font-size: .72rem;
+    padding: 6px 8px;
+  }
+}
+
+/* ── 2. PARTICIPANTES: filtros em grid ── */
+@media (max-width: 700px) {
+  #page-participants .card > .row:first-child {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  #page-participants .card > .row:first-child > .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+  #page-participants .card > .row:first-child > .row .tbtn {
+    text-align: center;
+    justify-content: center;
+    font-size: .78rem;
+    padding: 8px 4px;
+  }
+  /* Segunda linha de filtros (género/idade) */
+  .part-filter-row2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    width: 100%;
+  }
+  .part-filter-row2 .tbtn {
+    text-align: center;
+    justify-content: center;
+    font-size: .75rem;
+    padding: 7px 4px;
+  }
+  .part-filter-section-label {
+    font-size: .58rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--textsub);
+    margin-bottom: 4px;
+    display: block;
+  }
+}
+
+/* ── 3. VISUALIZAR: topbar mobile simplificado ── */
+@media (max-width: 700px) {
+  #page-visualize {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    padding: 0 !important;
+  }
+
+  /* Topbar mobile: só Plotar + Engrenagem */
+  #viz-topbar {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: visible !important;
+    padding: 8px 12px;
+    gap: 8px;
+    align-items: center;
+    min-height: 52px;
+  }
+  /* Esconde todas as seções exceto Plotar */
+  .viz-topbar-section:not(#viz-tb-plot):not(#viz-tb-mobile-actions) {
+    display: none !important;
+  }
+  #viz-tb-plot {
+    flex: 1;
+  }
+  #viz-tb-plot #btn-plot {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+  }
+  #viz-tb-mobile-actions {
+    display: flex !important;
+    gap: 6px;
+    align-items: center;
+    border: none;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  /* Área de gráficos: ocupa resto da tela e scrolla */
+  .viz-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .viz-plots {
+    padding: 10px;
+    gap: 10px;
+    padding-bottom: calc(var(--mobile-bottom-nav-h) + var(--safe-bottom) + 8px);
+  }
+
+  /* Gráficos: força width 100% sem overflow */
+  .viz-plots .plot-wrap,
+  .viz-plots .js-plotly-plot,
+  .viz-plots canvas {
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+  .viz-metric-block { gap: 8px; }
+  .viz-row-2col { grid-template-columns: 1fr; }
+
+  /* Options panel: fecha no mobile (abre via popup) */
+  #viz-options-panel { display: none !important; }
+}
+
+/* ── 4. POPUP DE CONFIGURAÇÕES DO VISUALIZADOR ── */
+.viz-config-popup-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 500;
+  align-items: flex-end;
+  justify-content: center;
+}
+.viz-config-popup-overlay.open { display: flex; }
+
+.viz-config-popup {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 20px 16px;
+  padding-bottom: calc(20px + var(--safe-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: slideUp .25s cubic-bezier(.4,0,.2,1);
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+.viz-config-popup__header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 4px;
+}
+.viz-config-popup__title {
+  font-family: var(--display); font-size: 1rem; font-weight: 800;
+}
+.viz-config-popup__close {
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--panel);
+  color: var(--textdim); font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+
+.viz-config-section { display: flex; flex-direction: column; gap: 8px; }
+.viz-config-section-title {
+  font-size: .65rem; font-weight: 800; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--textsub);
+  padding-bottom: 4px; border-bottom: 1px solid var(--border);
+}
+.viz-config-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.viz-config-row .tbtn { flex: 1; text-align: center; min-width: 0; font-size: .8rem; }
+.viz-config-row label { font-size: .82rem; }
+
+/* ── 5. POPUP DE EXPORTAÇÃO ── */
+.viz-export-popup-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 500;
+  align-items: flex-end;
+}
+.viz-export-popup-overlay.open { display: flex; }
+
+.viz-export-popup {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  padding: 20px 16px;
+  padding-bottom: calc(20px + var(--safe-bottom));
+  display: flex; flex-direction: column; gap: 14px;
+  animation: slideUp .25s cubic-bezier(.4,0,.2,1);
+}
+.viz-export-popup__title {
+  font-family: var(--display); font-size: 1rem; font-weight: 800;
+}
+.viz-export-graph-list {
+  display: flex; flex-direction: column; gap: 6px;
+  max-height: 40vh; overflow-y: auto;
+}
+.viz-export-graph-item {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 12px; cursor: pointer;
+  transition: border-color .15s;
+}
+.viz-export-graph-item.selected { border-color: var(--accent); background: var(--accent-bg); }
+.viz-export-graph-item__check {
+  width: 18px; height: 18px; border-radius: 4px;
+  border: 2px solid var(--border2); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; color: var(--accent);
+  transition: border-color .15s, background .15s;
+}
+.viz-export-graph-item.selected .viz-export-graph-item__check {
+  border-color: var(--accent); background: var(--accent);
+  color: #fff;
+}
+.viz-export-graph-item__label { font-size: .88rem; font-weight: 600; flex: 1; }
+.viz-export-format-row {
+  display: flex; gap: 8px;
+}
+.viz-export-format-btn {
+  flex: 1; padding: 10px; border-radius: 8px;
+  border: 2px solid var(--border2); background: var(--panel);
+  font-family: var(--sans); font-weight: 700; font-size: .88rem;
+  color: var(--textdim); cursor: pointer; text-align: center;
+  transition: all .15s;
+}
+.viz-export-format-btn.active {
+  border-color: var(--accent); background: var(--accent-bg); color: var(--accent);
+}
+.viz-export-actions { display: flex; gap: 8px; }
+.viz-export-actions .btn { flex: 1; justify-content: center; }
+
+/* ── 6. ASSINATURA: popup landscape ── */
+.sig-fullscreen-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: var(--bg);
+  z-index: 800;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+}
+.sig-fullscreen-overlay.open { display: flex; }
+
+.sig-fullscreen-header {
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sig-fullscreen-title { flex: 1; font-weight: 700; font-size: .95rem; }
+.sig-fullscreen-canvas-wrap {
+  flex: 1;
+  position: relative;
+  touch-action: none;
+  overflow: hidden;
+}
+.sig-fullscreen-canvas-wrap canvas {
+  position: absolute; inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: crosshair;
+}
+.sig-fullscreen-footer {
+  padding: 12px 16px;
+  padding-bottom: calc(12px + var(--safe-bottom));
+  display: flex; gap: 8px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sig-fullscreen-footer .btn { flex: 1; justify-content: center; }
+
+/* Botão "Ampliar para assinar" no campo normal */
+.sig-expand-btn {
+  display: none;
+  width: 100%;
+  margin-top: 6px;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1.5px dashed var(--border2);
+  background: var(--panel);
+  color: var(--textdim);
+  font-size: .85rem;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.sig-expand-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+@media (max-width: 700px) {
+  .sig-expand-btn { display: flex; }
+  /* No mobile, oculta o canvas inline e usa só o botão expand */
+  #tcle-sig-canvas-wrap { display: none; }
+}
+
+/* ── 7. FORMS: sub-nav como dropdown no mobile ── */
+@media (max-width: 700px) {
+  .form-sub-nav {
+    position: relative;
+    display: block !important;
+    margin-bottom: 0;
+  }
+  /* Esconde os toggle-btns individuais no mobile */
+  .form-sub-nav .toggle-btn { display: none !important; }
+
+  /* Mostra o select dropdown gerado por JS */
+  .form-sub-nav-select {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    font-family: var(--sans);
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    appearance: auto;
+  }
+
+  /* Tab de Formulários no bottom nav → abre o form-sub-nav como fan */
+  #page-forms {
+    padding-top: 8px;
+  }
+}
+
+/* ── 8. SIDENAV: itens com sub-menu (fan) no desktop ── */
+.sidenav-submenu {
+  display: none;
+  flex-direction: column;
+  padding: 2px 0 4px 30px;
+  gap: 1px;
+}
+.sidenav-submenu.open { display: flex; }
+.sidenav-submenu .tab-btn {
+  font-size: .8rem;
+  padding: 6px 8px;
+  color: var(--textsub);
+}
+.sidenav-submenu .tab-btn.active { color: var(--accent); }
+.tab-btn-has-sub .tab-chevron {
+  font-size: .65rem;
+  margin-left: auto;
+  transition: transform .2s;
+  color: var(--textsub);
+}
+.tab-btn-has-sub.sub-open .tab-chevron { transform: rotate(90deg); }
+
+/* Mobile drawer: sub-itens */
+@media (max-width: 700px) {
+  .mobile-drawer .sidenav-submenu { display: none; padding-left: 28px; }
+  .mobile-drawer .sidenav-submenu.open { display: flex; }
+}

@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Rock+Salt&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/mobile.css">
 <!-- External Libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
@@ -14,6 +15,73 @@
 </head>
 <body>
 <div class="app">
+
+<!-- ════════════════════════════════════
+     MOBILE HEADER
+════════════════════════════════════ -->
+<header class="mobile-header" id="mobile-header">
+  <button class="mobile-header__hamburger" id="mobile-hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <span class="mobile-header__title">T-MIRIM</span>
+  <div class="mobile-header__actions">
+    <button class="hdr-btn" id="btn-theme-mobile" title="Tema">🌙</button>
+  </div>
+</header>
+
+<!-- MOBILE DRAWER OVERLAY -->
+<div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+
+<!-- MOBILE DRAWER -->
+<nav class="mobile-drawer" id="mobile-drawer">
+  <div class="mobile-drawer__header">
+    <div style="font-family:var(--display);font-size:1.1rem;font-weight:800;color:var(--accent);letter-spacing:1px">T-MIRIM</div>
+    <em class="logo-sub" style="display:block">Musicoterapia</em>
+  </div>
+  <div class="mobile-drawer__nav" id="mobile-drawer-nav">
+    <div class="tab-group-label">Dados</div>
+    <button class="tab-btn" data-page="group"><span class="tab-icon">📁</span><span class="tab-label">Agrupar</span></button>
+    <button class="tab-btn" data-page="dataframe"><span class="tab-icon">🗃</span><span class="tab-label">DataFrame</span></button>
+    <button class="tab-btn" data-page="participants"><span class="tab-icon">👤</span><span class="tab-label">Participantes</span></button>
+    <div class="tab-group-label">Resultados</div>
+    <button class="tab-btn" data-page="analyze"><span class="tab-icon">📊</span><span class="tab-label">Analisar</span></button>
+    <button class="tab-btn" data-page="explore"><span class="tab-icon">🔍</span><span class="tab-label">Explorar</span></button>
+    <button class="tab-btn" data-page="visualize"><span class="tab-icon">📈</span><span class="tab-label">Visualizar</span></button>
+    <div class="tab-group-label">Análises Avançadas</div>
+    <button class="tab-btn" data-page="timing"><span class="tab-icon">⏱</span><span class="tab-label">Erro Temporal</span></button>
+    <button class="tab-btn" data-page="dass"><span class="tab-icon">🧠</span><span class="tab-label">DASS-21</span></button>
+    <button class="tab-btn" data-page="ritmic"><span class="tab-icon">🥁</span><span class="tab-label">Testes Rítmicos</span></button>
+    <button class="tab-btn" data-page="forms"><span class="tab-icon">📋</span><span class="tab-label">Formulários</span></button>
+    <button class="tab-btn" data-page="report"><span class="tab-icon">📄</span><span class="tab-label">Relatório</span></button>
+  </div>
+  <div class="mobile-drawer__footer">
+    <button class="hdr-btn" id="btn-theme-drawer" title="Tema">🌙</button>
+  </div>
+</nav>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+  <button class="mobile-bottom-nav__item active" data-page="group">
+    <span class="mobile-bottom-nav__icon">📁</span>
+    <span class="mobile-bottom-nav__label">Agrupar</span>
+  </button>
+  <button class="mobile-bottom-nav__item" data-page="analyze">
+    <span class="mobile-bottom-nav__icon">📊</span>
+    <span class="mobile-bottom-nav__label">Analisar</span>
+  </button>
+  <button class="mobile-bottom-nav__item" data-page="visualize">
+    <span class="mobile-bottom-nav__icon">📈</span>
+    <span class="mobile-bottom-nav__label">Visualizar</span>
+  </button>
+  <button class="mobile-bottom-nav__item" data-page="participants">
+    <span class="mobile-bottom-nav__icon">👤</span>
+    <span class="mobile-bottom-nav__label">Participantes</span>
+  </button>
+  <button class="mobile-bottom-nav__item" data-page="forms">
+    <span class="mobile-bottom-nav__icon">📋</span>
+    <span class="mobile-bottom-nav__label">Forms</span>
+  </button>
+</nav>
 
 <!-- ════════════════════════════════════
      SIDENAV
@@ -175,10 +243,28 @@
   <div class="card" style="flex:1">
     <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
       <div class="card-title" style="margin:0">Participantes</div>
-      <div class="row g8">
-        <button class="tbtn on" id="pf-all">Todos</button>
-        <button class="tbtn on" id="pf-musico" style="border-color:#2196f3;color:#2196f3">Músicos</button>
-        <button class="tbtn on" id="pf-nmusico" style="border-color:#e63946;color:#e63946">Não-Músicos</button>
+      <div class="col" style="gap:6px;flex:1">
+        <div>
+          <span class="part-filter-section-label">Perfil Musical</span>
+          <div style="display:flex;gap:6px">
+            <button class="tbtn on" id="pf-all">Todos</button>
+            <button class="tbtn on" id="pf-musico" style="border-color:#2196f3;color:#2196f3">Músicos</button>
+            <button class="tbtn on" id="pf-nmusico" style="border-color:#e63946;color:#e63946">Não-Músicos</button>
+          </div>
+        </div>
+        <div>
+          <span class="part-filter-section-label">Outros filtros</span>
+          <div class="part-filter-row2">
+            <button class="tbtn on" id="pf-gender-all" data-pf-gender="">⚥ Todos</button>
+            <button class="tbtn" id="pf-gender-m" data-pf-gender="M">♂ Masculino</button>
+            <button class="tbtn" id="pf-gender-f" data-pf-gender="F">♀ Feminino</button>
+            <button class="tbtn" id="pf-gender-o" data-pf-gender="O">⊕ Outro</button>
+            <button class="tbtn on" id="pf-age-all" data-pf-age="">📅 Todas idades</button>
+            <button class="tbtn" id="pf-age-young" data-pf-age="young">-25 anos</button>
+            <button class="tbtn" id="pf-age-mid" data-pf-age="mid">26-40</button>
+            <button class="tbtn" id="pf-age-senior" data-pf-age="senior">41+</button>
+          </div>
+        </div>
       </div>
     </div>
     <div id="part-cards-grid" class="part-cards-grid"></div>
@@ -320,7 +406,7 @@
   <div id="viz-topbar">
 
     <!-- Plotar -->
-    <div class="viz-topbar-section">
+    <div class="viz-topbar-section" id="viz-tb-plot">
       <button class="btn primary" id="btn-plot" style="font-size:.95rem;font-weight:800;padding:7px 20px">▶ Plotar</button>
     </div>
 
@@ -374,10 +460,15 @@
       </div>
     </div>
 
-    <!-- Right tools -->
+    <!-- Right tools (desktop) -->
     <div class="viz-topbar-section">
       <button id="btn-viz-gear" title="Opções avançadas">⚙</button>
-      <button class="btn" id="btn-download-plots" disabled style="font-size:.78rem;padding:5px 10px">📥 SVG</button>
+      <button class="btn" id="btn-download-plots" disabled style="font-size:.78rem;padding:5px 10px">📥 Exportar</button>
+    </div>
+    <!-- Mobile-only actions -->
+    <div class="viz-topbar-section" id="viz-tb-mobile-actions" style="display:none">
+      <button class="btn" id="btn-viz-gear-mobile" title="Configurações" style="padding:8px 12px;font-size:1.1rem">⚙️</button>
+      <button class="btn" id="btn-download-plots-mobile" disabled style="padding:8px 12px;font-size:1.1rem">📥</button>
     </div>
   </div>
 
@@ -614,73 +705,85 @@
      PAGE — TESTES RÍTMICOS
 ════════════════════════════════════ -->
 <section class="page" id="page-ritmic">
-  <div class="row g14" style="align-items:flex-start;flex-wrap:wrap">
 
-    <!-- Left: test controls -->
-    <div class="col" style="min-width:220px;max-width:260px;gap:12px">
-      <div class="card">
-        <div class="card-title">🥁 Testes Rítmicos</div>
-        <div class="col g6">
-          <button class="toggle-btn on" data-rtest="tte" onclick="switchRTest('tte')">⏱ Tempo Espontâneo</button>
-          <button class="toggle-btn"    data-rtest="metro" onclick="switchRTest('metro')" style="opacity:.45;cursor:not-allowed" disabled>🎵 Metrônomo <small style="font-size:.65rem;color:var(--textsub)">em breve</small></button>
-          <button class="toggle-btn"    data-rtest="sync"  onclick="switchRTest('sync')"  style="opacity:.45;cursor:not-allowed" disabled>🔄 Sincronização <small style="font-size:.65rem;color:var(--textsub)">em breve</small></button>
+  <!-- ══ MOBILE: tela de setup (some quando teste inicia) ══ -->
+  <div id="tte-setup-screen">
+
+    <!-- Seletor de sub-teste -->
+    <div class="ritmic-subtests">
+      <button class="toggle-btn on" data-rtest="tte" onclick="switchRTest('tte')">⏱ Tempo Espontâneo</button>
+      <button class="toggle-btn" data-rtest="metro" onclick="switchRTest('metro')" style="opacity:.45;cursor:not-allowed" disabled>🎵 Metrônomo <small>em breve</small></button>
+      <button class="toggle-btn" data-rtest="sync" onclick="switchRTest('sync')" style="opacity:.45;cursor:not-allowed" disabled>🔄 Sincronização <small>em breve</small></button>
+    </div>
+
+    <!-- Config card -->
+    <div class="card" id="tte-config">
+      <div class="card-title">⚙️ Configuração</div>
+      <div class="col g8">
+        <div class="col g4">
+          <label class="form-lbl">Participante</label>
+          <input class="form-input" id="tte-participante" type="text" placeholder="Nome (opcional)" autocomplete="off">
         </div>
-      </div>
-      <!-- TTE config -->
-      <div class="card" id="tte-config">
-        <div class="card-title">Configuração</div>
-        <div class="col g8">
-          <div class="col g4">
-            <label style="font-size:.75rem;font-weight:700;color:var(--textdim);text-transform:uppercase;letter-spacing:.7px">Participante</label>
-            <input class="form-input" id="tte-participante" type="text" placeholder="Nome (opcional)">
-          </div>
-          <div class="col g4">
-            <label style="font-size:.75rem;font-weight:700;color:var(--textdim);text-transform:uppercase;letter-spacing:.7px">Nº de batidas</label>
-            <input class="form-input" id="tte-n-beats" type="number" value="21" min="5" max="50">
-          </div>
-          <button class="btn" id="tte-reset-btn" onclick="tteReset()" style="font-size:.82rem">↺ Reiniciar</button>
-          <button class="btn primary" id="tte-export-btn" onclick="tteExportCSV()" disabled style="font-size:.82rem">💾 Exportar CSV</button>
+        <div class="col g4">
+          <label class="form-lbl">Nº de batidas</label>
+          <input class="form-input" id="tte-n-beats" type="number" value="21" min="5" max="50">
         </div>
+        <button class="btn primary" id="tte-start-btn" onclick="tteStartSession()" style="width:100%;margin-top:4px;font-size:1rem;padding:14px">
+          ▶ Iniciar Teste
+        </button>
       </div>
     </div>
 
-    <!-- Right: TTE content -->
-    <div class="flex1 col" style="min-width:0;gap:12px">
+  </div><!-- /tte-setup-screen -->
 
-      <!-- TTE panel -->
-      <div id="rtest-tte" style="display:flex;flex-direction:column;gap:12px">
+  <!-- ══ TTE PANEL (ativo durante o teste) ══ -->
+  <div id="rtest-tte" style="display:none;flex-direction:column;gap:12px">
 
-        <!-- Tap area -->
-        <div class="card" style="text-align:center;padding:32px 20px">
-          <p style="font-size:.9rem;color:var(--textdim);margin-bottom:20px;line-height:1.6">
-            Pressione o botão abaixo ou a tecla <strong style="color:var(--accent)">Espaço</strong> para marcar sua pulsação espontânea.<br>
-            O teste registra automaticamente os intervalos entre batidas (IOI).
-          </p>
-          <button id="tte-pulse-btn" onclick="ttePulse()"
-            style="width:180px;height:180px;border-radius:50%;font-size:1rem;font-weight:800;background:var(--accent-bg);border:3px solid var(--accent);color:var(--accent);cursor:pointer;transition:all .1s;font-family:var(--sans);letter-spacing:.5px;display:inline-flex;align-items:center;justify-content:center;text-align:center;padding:10px">
-            Clique para marcar a batida
-          </button>
-          <div id="tte-count-label" style="margin-top:18px;font-size:1.1rem;font-weight:700;font-family:var(--mono);color:var(--textdim)">
-            Batidas: <span id="tte-count">0</span>/<span id="tte-total">21</span>
-          </div>
-        </div>
+    <!-- Tap area — ocupa a tela inteira no mobile -->
+    <div class="tte-tap-area">
 
-        <!-- Results (hidden until done) -->
-        <div class="card" id="tte-results" style="display:none">
-          <div class="card-title">Resultados</div>
-          <div class="row" style="gap:10px;flex-wrap:wrap;margin-bottom:14px">
-            <div class="stat-card"><div class="val" id="tte-bpm-val">—</div><div class="lbl">BPM</div></div>
-            <div class="stat-card"><div class="val" id="tte-mean-ioi">—</div><div class="lbl">IOI Médio (ms)</div></div>
-            <div class="stat-card"><div class="val" id="tte-cv-val">—</div><div class="lbl">CV (%)</div></div>
-            <div class="stat-card"><div class="val" id="tte-total-time">—</div><div class="lbl">Tempo total (ms)</div></div>
-          </div>
-          <canvas id="tte-chart" style="width:100%;max-height:320px"></canvas>
-        </div>
+      <div class="tte-tap-info">
+        <span id="tte-count-label-top">
+          Batidas: <strong id="tte-count">0</strong>/<strong id="tte-total">21</strong>
+        </span>
+        <button class="btn" id="tte-reset-btn" onclick="tteReset()" style="font-size:.8rem;padding:6px 12px">↺ Reiniciar</button>
+      </div>
 
+      <button id="tte-pulse-btn"
+        ontouchstart="ttePulseMobile(event)"
+        onclick="ttePulseDesktop(event)"
+        style="touch-action:manipulation;user-select:none;-webkit-user-select:none">
+        <span class="tte-btn-icon">🥁</span>
+        <span class="tte-btn-label">Toque para marcar</span>
+        <span class="tte-btn-sub">ou pressione Espaço</span>
+      </button>
+
+      <div class="tte-ioi-live" id="tte-ioi-live">
+        <span id="tte-last-ioi">—</span>
+        <small>ms último intervalo</small>
       </div>
 
     </div>
-  </div>
+
+    <!-- Results (hidden until done) -->
+    <div class="card" id="tte-results" style="display:none">
+      <div class="card-title">Resultados</div>
+      <div class="row" style="gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        <div class="stat-card"><div class="val" id="tte-bpm-val">—</div><div class="lbl">BPM</div></div>
+        <div class="stat-card"><div class="val" id="tte-mean-ioi">—</div><div class="lbl">IOI Médio (ms)</div></div>
+        <div class="stat-card"><div class="val" id="tte-cv-val">—</div><div class="lbl">CV (%)</div></div>
+        <div class="stat-card"><div class="val" id="tte-total-time">—</div><div class="lbl">Tempo total (ms)</div></div>
+      </div>
+      <canvas id="tte-chart" style="width:100%;max-height:320px"></canvas>
+      <p id="tte-analysis" style="margin-top:10px;font-size:.82rem;color:var(--textdim);font-family:var(--mono)"></p>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn primary" id="tte-export-btn" onclick="tteExportCSV()" disabled>💾 Exportar CSV</button>
+        <button class="btn" onclick="tteReset()">↺ Novo teste</button>
+      </div>
+    </div>
+
+  </div><!-- /rtest-tte -->
+
 </section>
 
 <!-- ════════════════════════════════════
@@ -724,6 +827,9 @@
             </div>
             <div style="font-size:.72rem;color:#777;margin-bottom:6px">Assinatura:</div>
             <div id="tcle-sig-canvas-wrap"></div>
+            <button class="sig-expand-btn" id="btn-sig-expand" onclick="openSigFullscreen()">
+              ✍️ Toque para assinar (tela cheia)
+            </button>
           </div>
           <!-- Researcher -->
           <div>
@@ -1082,7 +1188,130 @@
 <!-- ══════════════════════════════════════════
      JS MODULES — load order matters
 ══════════════════════════════════════════ -->
+<!-- MOBILE POPUPS -->
+
+<!-- Viz Config Popup -->
+<div class="viz-config-popup-overlay" id="viz-config-popup-overlay">
+  <div class="viz-config-popup" id="viz-config-popup">
+    <div class="viz-config-popup__header">
+      <span class="viz-config-popup__title">⚙️ Configurações do gráfico</span>
+      <button class="viz-config-popup__close" onclick="closeVizConfigPopup()">✕</button>
+    </div>
+    <!-- Atividades -->
+    <div class="viz-config-section">
+      <div class="viz-config-section-title">Atividades</div>
+      <div class="viz-config-row" style="gap:4px">
+        <button class="tbtn" id="btn-act-all-m">Todas</button>
+        <button class="tbtn" id="btn-act-none-m">Nenhuma</button>
+      </div>
+      <div id="activity-toggles-mobile" style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"></div>
+    </div>
+    <!-- Métricas -->
+    <div class="viz-config-section">
+      <div class="viz-config-section-title">Métricas</div>
+      <div class="viz-config-row">
+        <button class="tbtn on" data-metric-m="IOI">IOI</button>
+        <button class="tbtn on" data-metric-m="Velocity">Velocity</button>
+        <button class="tbtn on" data-metric-m="Density">Densidade</button>
+        <button class="tbtn on" data-metric-m="BPM_Local">BPM</button>
+      </div>
+    </div>
+    <!-- Tipo -->
+    <div class="viz-config-section">
+      <div class="viz-config-section-title">Tipo de gráfico</div>
+      <div class="viz-config-row">
+        <button class="tbtn on" data-pt-m="line">─ Linha</button>
+        <button class="tbtn" data-pt-m="scatter">· Scatter</button>
+      </div>
+    </div>
+    <!-- Grupos -->
+    <div class="viz-config-section">
+      <div class="viz-config-section-title">Grupos</div>
+      <div class="viz-config-row">
+        <button class="tbtn on" data-grp-m="musicos" style="border-color:#2196f3;color:#2196f3">Músicos</button>
+        <button class="tbtn on" data-grp-m="nao" style="border-color:#e63946;color:#e63946">Não-Músicos</button>
+      </div>
+    </div>
+    <!-- Modo -->
+    <div class="viz-config-section">
+      <div class="viz-config-section-title">Modo</div>
+      <div class="viz-config-row">
+        <button class="tbtn on" data-dm-m="agrupado">Agrupado</button>
+        <button class="tbtn" data-dm-m="individual">Individual</button>
+      </div>
+    </div>
+    <!-- Visualização -->
+    <div class="viz-config-section">
+      <div class="viz-config-section-title">Visualização</div>
+      <div class="viz-config-row">
+        <button class="tbtn on" id="tog-boxplot-m">Boxplot</button>
+        <button class="tbtn on" id="tog-timeseries-m">Série Temporal</button>
+      </div>
+      <div class="viz-config-row" style="margin-top:4px">
+        <label style="display:flex;align-items:center;gap:6px;font-size:.85rem;cursor:pointer">
+          <input type="checkbox" id="chk-plotar-junto-m" checked style="accent-color:var(--accent)"> Plotar junto
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:.85rem;cursor:pointer">
+          <input type="checkbox" id="chk-show-names-m" style="accent-color:var(--accent)"> Nomes
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:.85rem;cursor:pointer">
+          <input type="checkbox" id="chk-show-legend-m" style="accent-color:var(--accent)"> Legendas
+        </label>
+      </div>
+    </div>
+    <button class="btn primary" onclick="applyVizConfigFromPopup()" style="width:100%;padding:12px;margin-top:4px">
+      ▶ Aplicar e Plotar
+    </button>
+  </div>
+</div>
+
+<!-- Viz Export Popup -->
+<div class="viz-export-popup-overlay" id="viz-export-popup-overlay">
+  <div class="viz-export-popup">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <span class="viz-export-popup__title">📥 Exportar gráficos</span>
+      <button class="viz-config-popup__close" onclick="closeVizExportPopup()">✕</button>
+    </div>
+    <div>
+      <div class="viz-config-section-title" style="margin-bottom:8px">Selecionar gráficos</div>
+      <div style="display:flex;gap:6px;margin-bottom:8px">
+        <button class="tbtn" onclick="selectAllExportGraphs()">Todos</button>
+        <button class="tbtn" onclick="selectNoneExportGraphs()">Nenhum</button>
+      </div>
+      <div class="viz-export-graph-list" id="viz-export-graph-list"></div>
+    </div>
+    <div>
+      <div class="viz-config-section-title" style="margin-bottom:8px">Formato</div>
+      <div class="viz-export-format-row">
+        <button class="viz-export-format-btn active" id="fmt-svg" onclick="setExportFmt('svg')">SVG</button>
+        <button class="viz-export-format-btn" id="fmt-png" onclick="setExportFmt('png')">PNG transparente</button>
+      </div>
+    </div>
+    <div class="viz-export-actions">
+      <button class="btn" onclick="closeVizExportPopup()">Cancelar</button>
+      <button class="btn primary" onclick="doExportSelected()">💾 Baixar selecionados</button>
+    </div>
+  </div>
+</div>
+
+<!-- Signature Fullscreen Popup -->
+<div class="sig-fullscreen-overlay" id="sig-fullscreen-overlay">
+  <div class="sig-fullscreen-header">
+    <span class="sig-fullscreen-title">✍️ Assinatura</span>
+    <button class="btn" onclick="closeSigFullscreen(false)" style="padding:6px 12px">Cancelar</button>
+    <button class="btn primary" onclick="closeSigFullscreen(true)" style="padding:6px 14px">Confirmar ✓</button>
+  </div>
+  <div class="sig-fullscreen-canvas-wrap" id="sig-fullscreen-canvas-wrap">
+    <canvas id="sig-fullscreen-canvas"></canvas>
+  </div>
+  <div class="sig-fullscreen-footer">
+    <button class="btn" onclick="clearFullscreenSig()" style="flex:none">↺ Limpar</button>
+    <span style="flex:1;font-size:.78rem;color:var(--textdim);display:flex;align-items:center;padding:0 8px">Assine com o dedo na área acima</span>
+  </div>
+</div>
+
 <!-- Core -->
+
 <script src="js/core/state.js"></script>
 <script src="js/core/utils.js"></script>
 <script src="js/core/nav.js"></script>
@@ -1101,5 +1330,6 @@
 <script src="js/pages/participantes.js"></script>
 <script src="js/pages/forms.js"></script>
 <script src="js/pages/ritmic.js"></script>
+<script src="js/core/mobile.js"></script>
 </body>
 </html>
