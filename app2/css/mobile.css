@@ -581,209 +581,134 @@
   }
 }
 
+
 /* ══════════════════════════════════════════════════════════
-   MELHORIAS MOBILE — RODADA 2
+   MELHORIAS — RODADA 2 (corrigida)
 ══════════════════════════════════════════════════════════ */
 
-/* ── 1. ANALISAR: botões lado a lado ── */
+/* ────────────────────────────────────────
+   SUB-MENUS — funciona em DESKTOP e MOBILE
+   O chevron (›) é o único gatilho de expand.
+   O clique no label do pai navega normalmente.
+────────────────────────────────────────── */
+.tab-btn-has-sub {
+  position: relative;
+}
+.tab-chevron {
+  font-size: .9rem;
+  margin-left: auto;
+  padding: 4px 8px;
+  margin-right: -6px;
+  border-radius: 6px;
+  color: var(--textsub);
+  transition: transform .2s, color .15s;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px; min-height: 28px;
+}
+.tab-chevron:hover { color: var(--accent); background: var(--panel2); }
+.tab-btn-has-sub.sub-open .tab-chevron { transform: rotate(90deg); color: var(--accent); }
+
+.sidenav-submenu {
+  display: none;
+  flex-direction: column;
+  padding: 2px 0 4px 28px;
+  gap: 1px;
+}
+.sidenav-submenu.open { display: flex; }
+.sidenav-submenu .tab-btn {
+  font-size: .82rem;
+  color: var(--textsub);
+  padding: 6px 10px;
+}
+.sidenav-submenu .tab-btn:hover { color: var(--accent); }
+.sidenav-submenu .tab-btn.active { color: var(--accent); }
+
+/* ────────────────────────────────────────
+   ANALISAR — botões lado a lado no mobile
+────────────────────────────────────────── */
 @media (max-width: 700px) {
   #page-analyze .card > .row:first-child {
-    gap: 6px;
-  }
-  #page-analyze [data-abt] {
-    flex: 1;
-    min-width: 0;
-    font-size: .72rem;
-    padding: 7px 4px;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  /* "Relatório Individual" → "Individual" etc via ::before trick não é possível sem JS,
-     mas reduzindo fonte e padding já cabe */
-  #page-analyze .card > .row:first-child {
     flex-wrap: nowrap;
+    gap: 5px;
     align-items: center;
   }
-  #page-analyze .card > .row:first-child > div:last-child {
-    flex-shrink: 0;
-    margin-left: 0;
+  #page-analyze [data-abt] {
+    flex: 1; min-width: 0;
+    font-size: .72rem;
+    padding: 7px 5px;
+    text-align: center;
   }
   #page-analyze #btn-export-analysis,
   #page-analyze #btn-export-analysis-xl {
-    font-size: .72rem;
-    padding: 6px 8px;
+    font-size: .7rem; padding: 6px 7px; flex-shrink: 0;
   }
 }
 
-/* ── 2. PARTICIPANTES: filtros em grid ── */
+/* ────────────────────────────────────────
+   PARTICIPANTES — filtros em grid no mobile
+────────────────────────────────────────── */
 @media (max-width: 700px) {
   #page-participants .card > .row:first-child {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
+    flex-direction: column; align-items: stretch; gap: 10px;
   }
   #page-participants .card > .row:first-child > .row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 6px;
+    display: flex; flex-wrap: wrap; gap: 6px;
   }
-  #page-participants .card > .row:first-child > .row .tbtn {
-    text-align: center;
-    justify-content: center;
-    font-size: .78rem;
-    padding: 8px 4px;
+  #page-participants .tbtn {
+    flex: 1; min-width: calc(33% - 6px);
+    text-align: center; font-size: .78rem; padding: 8px 4px;
   }
-  /* Segunda linha de filtros (género/idade) */
   .part-filter-row2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    width: 100%;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%;
   }
   .part-filter-row2 .tbtn {
-    text-align: center;
-    justify-content: center;
-    font-size: .75rem;
-    padding: 7px 4px;
+    text-align: center; font-size: .75rem; padding: 7px 4px;
   }
   .part-filter-section-label {
-    font-size: .58rem;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--textsub);
-    margin-bottom: 4px;
-    display: block;
+    font-size: .58rem; font-weight: 800; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--textsub); margin-bottom: 4px; display: block;
   }
 }
 
-/* ── 3. VISUALIZAR: topbar mobile simplificado ── */
+/* ────────────────────────────────────────
+   VISUALIZAR — topbar mobile
+────────────────────────────────────────── */
 @media (max-width: 700px) {
   #page-visualize {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-    padding: 0 !important;
+    display: flex; flex-direction: column;
+    height: 100%; overflow: hidden; padding: 0 !important;
   }
-
-  /* Topbar mobile: só Plotar + Engrenagem */
   #viz-topbar {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    overflow-x: visible !important;
-    padding: 8px 12px;
-    gap: 8px;
-    align-items: center;
-    min-height: 52px;
+    display: flex !important; flex-wrap: nowrap !important;
+    overflow-x: visible !important; padding: 8px 12px;
+    gap: 8px; align-items: center; min-height: 52px;
   }
-  /* Esconde todas as seções exceto Plotar */
-  .viz-topbar-section:not(#viz-tb-plot):not(#viz-tb-mobile-actions) {
-    display: none !important;
-  }
-  #viz-tb-plot {
-    flex: 1;
-  }
-  #viz-tb-plot #btn-plot {
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-  }
+  /* Seções desktop ficam ocultas no mobile via JS (syncVizTopbar) */
+  #viz-tb-plot { flex: 1; }
+  #viz-tb-plot #btn-plot { width: 100%; padding: 10px; font-size: 1rem; }
   #viz-tb-mobile-actions {
-    display: flex !important;
-    gap: 6px;
-    align-items: center;
-    border: none;
-    padding: 0;
-    flex-shrink: 0;
+    gap: 6px; align-items: center; border: none; padding: 0; flex-shrink: 0;
   }
-
-  /* Área de gráficos: ocupa resto da tela e scrolla */
-  .viz-body {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
+  .viz-body { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .viz-plots {
     padding: 10px;
-    gap: 10px;
     padding-bottom: calc(var(--mobile-bottom-nav-h) + var(--safe-bottom) + 8px);
   }
-
-  /* Gráficos: força width 100% sem overflow */
   .viz-plots .plot-wrap,
   .viz-plots .js-plotly-plot,
-  .viz-plots canvas {
-    max-width: 100% !important;
-    width: 100% !important;
-    overflow: hidden !important;
-  }
-  .viz-metric-block { gap: 8px; }
+  .viz-plots canvas { max-width: 100% !important; width: 100% !important; overflow: hidden !important; }
   .viz-row-2col { grid-template-columns: 1fr; }
-
-  /* Options panel: fecha no mobile (abre via popup) */
   #viz-options-panel { display: none !important; }
 }
 
-/* ── 4. POPUP DE CONFIGURAÇÕES DO VISUALIZADOR ── */
-.viz-config-popup-overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.55);
-  z-index: 500;
-  align-items: flex-end;
-  justify-content: center;
-}
-.viz-config-popup-overlay.open { display: flex; }
-
-.viz-config-popup {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 20px 20px 0 0;
-  width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
-  padding: 20px 16px;
-  padding-bottom: calc(20px + var(--safe-bottom));
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  animation: slideUp .25s cubic-bezier(.4,0,.2,1);
-}
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
-}
-
-.viz-config-popup__header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 4px;
-}
-.viz-config-popup__title {
-  font-family: var(--display); font-size: 1rem; font-weight: 800;
-}
-.viz-config-popup__close {
-  width: 32px; height: 32px; border-radius: 8px;
-  border: 1px solid var(--border); background: var(--panel);
-  color: var(--textdim); font-size: 1.1rem;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-}
-
-.viz-config-section { display: flex; flex-direction: column; gap: 8px; }
-.viz-config-section-title {
-  font-size: .65rem; font-weight: 800; letter-spacing: 1.5px;
-  text-transform: uppercase; color: var(--textsub);
-  padding-bottom: 4px; border-bottom: 1px solid var(--border);
-}
-.viz-config-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-.viz-config-row .tbtn { flex: 1; text-align: center; min-width: 0; font-size: .8rem; }
-.viz-config-row label { font-size: .82rem; }
-
-/* ── 5. POPUP DE EXPORTAÇÃO ── */
+/* ────────────────────────────────────────
+   POPUP GENÉRICO (bottom sheet)
+────────────────────────────────────────── */
+.viz-config-popup-overlay,
 .viz-export-popup-overlay {
   display: none;
   position: fixed; inset: 0;
@@ -791,179 +716,119 @@
   z-index: 500;
   align-items: flex-end;
 }
+.viz-config-popup-overlay.open,
 .viz-export-popup-overlay.open { display: flex; }
 
+.viz-config-popup,
 .viz-export-popup {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 20px 20px 0 0;
-  width: 100%;
-  padding: 20px 16px;
-  padding-bottom: calc(20px + var(--safe-bottom));
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 20px 20px 0 0; width: 100%;
+  max-height: 82vh; overflow-y: auto;
+  padding: 20px 16px calc(20px + var(--safe-bottom));
   display: flex; flex-direction: column; gap: 14px;
   animation: slideUp .25s cubic-bezier(.4,0,.2,1);
 }
-.viz-export-popup__title {
-  font-family: var(--display); font-size: 1rem; font-weight: 800;
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.viz-config-popup__header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;
 }
-.viz-export-graph-list {
-  display: flex; flex-direction: column; gap: 6px;
-  max-height: 40vh; overflow-y: auto;
+.viz-config-popup__title { font-family: var(--display); font-size: 1rem; font-weight: 800; }
+.viz-config-popup__close {
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--panel);
+  color: var(--textdim); font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
 }
+.viz-config-section { display: flex; flex-direction: column; gap: 8px; }
+.viz-config-section-title {
+  font-size: .62rem; font-weight: 800; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--textsub);
+  padding-bottom: 4px; border-bottom: 1px solid var(--border);
+}
+.viz-config-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.viz-config-row .tbtn { flex: 1; text-align: center; min-width: 0; font-size: .8rem; }
+
+/* Export popup */
+.viz-export-popup__title { font-family: var(--display); font-size: 1rem; font-weight: 800; }
+.viz-export-graph-list { display: flex; flex-direction: column; gap: 6px; max-height: 38vh; overflow-y: auto; }
 .viz-export-graph-item {
   display: flex; align-items: center; gap: 10px;
   background: var(--panel); border: 1px solid var(--border);
-  border-radius: 8px; padding: 10px 12px; cursor: pointer;
-  transition: border-color .15s;
+  border-radius: 8px; padding: 10px 12px; cursor: pointer; transition: border-color .15s;
 }
 .viz-export-graph-item.selected { border-color: var(--accent); background: var(--accent-bg); }
 .viz-export-graph-item__check {
-  width: 18px; height: 18px; border-radius: 4px;
-  border: 2px solid var(--border2); flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .75rem; color: var(--accent);
-  transition: border-color .15s, background .15s;
+  width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border2);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; color: transparent; transition: all .15s;
 }
 .viz-export-graph-item.selected .viz-export-graph-item__check {
-  border-color: var(--accent); background: var(--accent);
-  color: #fff;
+  border-color: var(--accent); background: var(--accent); color: #fff;
 }
 .viz-export-graph-item__label { font-size: .88rem; font-weight: 600; flex: 1; }
-.viz-export-format-row {
-  display: flex; gap: 8px;
-}
+.viz-export-format-row { display: flex; gap: 8px; }
 .viz-export-format-btn {
   flex: 1; padding: 10px; border-radius: 8px;
   border: 2px solid var(--border2); background: var(--panel);
   font-family: var(--sans); font-weight: 700; font-size: .88rem;
-  color: var(--textdim); cursor: pointer; text-align: center;
-  transition: all .15s;
+  color: var(--textdim); cursor: pointer; text-align: center; transition: all .15s;
 }
-.viz-export-format-btn.active {
-  border-color: var(--accent); background: var(--accent-bg); color: var(--accent);
-}
+.viz-export-format-btn.active { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
 .viz-export-actions { display: flex; gap: 8px; }
 .viz-export-actions .btn { flex: 1; justify-content: center; }
 
-/* ── 6. ASSINATURA: popup landscape ── */
+/* ────────────────────────────────────────
+   ASSINATURA FULLSCREEN
+────────────────────────────────────────── */
 .sig-fullscreen-overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: var(--bg);
-  z-index: 800;
+  display: none; position: fixed; inset: 0;
+  background: var(--bg); z-index: 800;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: stretch;
 }
 .sig-fullscreen-overlay.open { display: flex; }
-
 .sig-fullscreen-header {
-  padding: 12px 16px;
-  display: flex; align-items: center; gap: 10px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
+  padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
 }
 .sig-fullscreen-title { flex: 1; font-weight: 700; font-size: .95rem; }
 .sig-fullscreen-canvas-wrap {
-  flex: 1;
-  position: relative;
-  touch-action: none;
-  overflow: hidden;
+  flex: 1; position: relative; touch-action: none; overflow: hidden; background: var(--surface);
 }
-.sig-fullscreen-canvas-wrap canvas {
-  position: absolute; inset: 0;
-  width: 100% !important;
-  height: 100% !important;
-  cursor: crosshair;
-}
+.sig-fullscreen-canvas-wrap canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; }
 .sig-fullscreen-footer {
-  padding: 12px 16px;
-  padding-bottom: calc(12px + var(--safe-bottom));
-  display: flex; gap: 8px;
-  border-top: 1px solid var(--border);
-  flex-shrink: 0;
+  padding: 12px 16px; padding-bottom: calc(12px + var(--safe-bottom));
+  display: flex; gap: 8px; border-top: 1px solid var(--border); flex-shrink: 0; align-items: center;
 }
-.sig-fullscreen-footer .btn { flex: 1; justify-content: center; }
+.sig-fullscreen-footer .btn { justify-content: center; }
 
-/* Botão "Ampliar para assinar" no campo normal */
 .sig-expand-btn {
-  display: none;
-  width: 100%;
-  margin-top: 6px;
-  justify-content: center;
-  gap: 6px;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1.5px dashed var(--border2);
-  background: var(--panel);
-  color: var(--textdim);
-  font-size: .85rem;
-  cursor: pointer;
-  transition: border-color .15s, color .15s;
+  display: none; width: 100%; margin-top: 6px;
+  justify-content: center; gap: 6px; padding: 10px; border-radius: 8px;
+  border: 1.5px dashed var(--border2); background: var(--panel);
+  color: var(--textdim); font-size: .85rem; cursor: pointer; transition: border-color .15s, color .15s;
 }
 .sig-expand-btn:hover { border-color: var(--accent); color: var(--accent); }
-
 @media (max-width: 700px) {
   .sig-expand-btn { display: flex; }
-  /* No mobile, oculta o canvas inline e usa só o botão expand */
   #tcle-sig-canvas-wrap { display: none; }
 }
 
-/* ── 7. FORMS: sub-nav como dropdown no mobile ── */
+/* ────────────────────────────────────────
+   FORMS — dropdown no mobile
+────────────────────────────────────────── */
 @media (max-width: 700px) {
-  .form-sub-nav {
-    position: relative;
-    display: block !important;
-    margin-bottom: 0;
-  }
-  /* Esconde os toggle-btns individuais no mobile */
   .form-sub-nav .toggle-btn { display: none !important; }
-
-  /* Mostra o select dropdown gerado por JS */
   .form-sub-nav-select {
-    width: 100%;
-    background: var(--panel);
-    border: 1px solid var(--border2);
-    color: var(--text);
-    border-radius: var(--radius);
-    padding: 10px 14px;
-    font-family: var(--sans);
-    font-size: .95rem;
-    font-weight: 600;
-    cursor: pointer;
-    appearance: auto;
-  }
-
-  /* Tab de Formulários no bottom nav → abre o form-sub-nav como fan */
-  #page-forms {
-    padding-top: 8px;
+    width: 100%; background: var(--panel); border: 1px solid var(--border2);
+    color: var(--text); border-radius: var(--radius); padding: 10px 14px;
+    font-family: var(--sans); font-size: .95rem; font-weight: 600; cursor: pointer;
   }
 }
 
-/* ── 8. SIDENAV: itens com sub-menu (fan) no desktop ── */
-.sidenav-submenu {
-  display: none;
-  flex-direction: column;
-  padding: 2px 0 4px 30px;
-  gap: 1px;
-}
-.sidenav-submenu.open { display: flex; }
-.sidenav-submenu .tab-btn {
-  font-size: .8rem;
-  padding: 6px 8px;
-  color: var(--textsub);
-}
-.sidenav-submenu .tab-btn.active { color: var(--accent); }
-.tab-btn-has-sub .tab-chevron {
-  font-size: .65rem;
-  margin-left: auto;
-  transition: transform .2s;
-  color: var(--textsub);
-}
-.tab-btn-has-sub.sub-open .tab-chevron { transform: rotate(90deg); }
-
-/* Mobile drawer: sub-itens */
+/* ────────────────────────────────────────
+   DRAWER — submenu no mobile
+────────────────────────────────────────── */
 @media (max-width: 700px) {
-  .mobile-drawer .sidenav-submenu { display: none; padding-left: 28px; }
-  .mobile-drawer .sidenav-submenu.open { display: flex; }
+  #mobile-drawer-nav .sidenav-submenu { padding-left: 24px; }
 }
