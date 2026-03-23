@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>T-MIRIM | DASS-21</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+/* ── Tokens ─────────────────────────────────────────────── */
+:root {
+  --bg:#0b0d13; --surface:#12151f; --panel:#181c28; --panel2:#1e2232;
+  --border:#272d40; --border2:#323a52;
+  --accent:#3ddba8; --accent-bg:rgba(61,219,168,.12);
+  --accent2:#ff5e7a; --accent2-bg:rgba(255,94,122,.12);
+  --accent3:#ffcc44; --accent3-bg:rgba(255,204,68,.12);
+  --accent4:#7b8cff;
+  --text:#dde1ef; --textdim:#6b748f; --textsub:#4a5168;
+  --radius:10px; --sans:'Plus Jakarta Sans',sans-serif; --mono:'DM Mono',monospace;
+}
+html.light {
+  --bg:#eef0f7; --surface:#fff; --panel:#f4f5fb; --panel2:#eaecf7;
+  --border:#d2d6e8; --border2:#bfc4d8;
+  --accent:#0a8c6a; --accent-bg:rgba(10,140,106,.1);
+  --accent2:#d4233c; --accent2-bg:rgba(212,35,60,.1);
+  --accent3:#b87a00; --accent3-bg:rgba(184,122,0,.1);
+  --accent4:#3d4fc8;
+  --text:#18202e; --textdim:#50597a; --textsub:#8890a8;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+/* ── Header ─────────────────────────────────────────────── */
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.header h1{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--accent);}
+.header .sub{font-size:.72rem;color:var(--textdim);margin-top:1px;}
+.hdr-btns{display:flex;gap:8px;}
+.hbtn{background:var(--panel);border:1px solid var(--border2);color:var(--textdim);border-radius:7px;padding:5px 12px;cursor:pointer;font-size:.78rem;transition:all .15s;}
+.hbtn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ── Progress ────────────────────────────────────────────── */
+.progress-track{height:4px;background:var(--panel);position:sticky;top:53px;z-index:199;}
+.progress-bar{height:100%;background:var(--accent);transition:width .3s ease;width:0%;}
+.progress-label{position:sticky;top:57px;z-index:198;text-align:center;font-size:.72rem;color:var(--textdim);padding:4px 0;background:var(--bg);}
+
+/* ── Screens ─────────────────────────────────────────────── */
+.screen{display:none;max-width:720px;margin:0 auto;padding:32px 20px;}
+.screen.active{display:block;}
+
+/* ── Setup card ─────────────────────────────────────────── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;}
+.card+.card{margin-top:14px;}
+.card h2{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--text);margin-bottom:16px;}
+.card p{font-size:.88rem;color:var(--textdim);line-height:1.7;margin-bottom:12px;}
+.card p:last-child{margin-bottom:0;}
+
+/* Radio group ── */
+.rg{display:flex;flex-wrap:wrap;gap:8px;}
+.ro{display:flex;align-items:center;gap:7px;background:var(--panel);border:1px solid var(--border);border-radius:7px;padding:8px 16px;cursor:pointer;font-size:.85rem;color:var(--textdim);transition:all .15s;user-select:none;}
+.ro input{display:none;}
+.ro:has(input:checked){border-color:var(--accent);color:var(--accent);background:var(--accent-bg);font-weight:700;}
+.ro:hover{border-color:var(--border2);color:var(--text);}
+
+/* Field ── */
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.field label{font-size:.75rem;font-weight:700;color:var(--textdim);text-transform:uppercase;letter-spacing:.7px;}
+.field input[type=text],.field input[type=number],.field input[type=date]{background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:9px 12px;font-family:var(--sans);font-size:.9rem;width:100%;transition:border-color .15s,box-shadow .15s;}
+.field input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:500px){.row2{grid-template-columns:1fr;}}
+
+/* Toggle switch ── */
+.toggle-row{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--textdim);}
+.toggle{position:relative;width:42px;height:24px;flex-shrink:0;}
+.toggle input{display:none;}
+.toggle-track{display:block;width:100%;height:100%;background:var(--panel2);border:1px solid var(--border2);border-radius:12px;transition:background .2s;}
+.toggle input:checked~.toggle-track{background:var(--accent);}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:left .2s;pointer-events:none;}
+.toggle input:checked~.toggle-thumb{left:21px;}
+.toggle{cursor:pointer;}
+
+/* Btn ── */
+.btn{padding:11px 26px;border-radius:8px;border:none;cursor:pointer;font-family:var(--sans);font-size:.9rem;font-weight:700;transition:all .15s;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px);}
+.btn-secondary{background:var(--panel);border:1px solid var(--border2);color:var(--textdim);}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+.btn-row{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;}
+
+/* ── Question screen ─────────────────────────────────────── */
+.q-num{font-family:var(--mono);font-size:.78rem;color:var(--textdim);margin-bottom:8px;}
+.q-text{font-size:1.25rem;font-weight:600;line-height:1.5;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;margin-bottom:20px;min-height:120px;display:flex;align-items:center;}
+@media(max-width:500px){.q-text{font-size:1.05rem;padding:20px;}}
+
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+@media(max-width:500px){.answers{grid-template-columns:1fr;}}
+.answer-btn{padding:16px 12px;background:var(--surface);border:2px solid var(--border);border-radius:9px;cursor:pointer;font-family:var(--sans);font-size:.88rem;font-weight:600;color:var(--textdim);transition:all .15s;text-align:left;display:flex;align-items:center;gap:10px;}
+.answer-btn:hover{border-color:var(--border2);color:var(--text);background:var(--panel);}
+.answer-btn.selected{border-color:var(--accent);color:var(--accent);background:var(--accent-bg);}
+.answer-btn .a-key{width:24px;height:24px;border-radius:5px;background:var(--panel2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-family:var(--mono);flex-shrink:0;}
+.answer-btn.selected .a-key{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+.q-nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.q-nav .spacer{flex:1;}
+.audio-indicator{display:flex;align-items:center;gap:6px;font-size:.75rem;color:var(--textdim);}
+.audio-dot{width:8px;height:8px;border-radius:50%;background:var(--textdim);}
+.audio-dot.playing{background:var(--accent);animation:pulse .8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* Alert ── */
+.alert{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--accent2-bg);border:1px solid var(--accent2);color:var(--accent2);padding:10px 20px;border-radius:8px;font-size:.85rem;font-weight:600;z-index:999;opacity:0;pointer-events:none;transition:opacity .2s;}
+.alert.show{opacity:1;}
+
+/* ── Results screen ──────────────────────────────────────── */
+.results-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:20px 0;}
+@media(max-width:500px){.results-grid{grid-template-columns:1fr;}}
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;}
+.result-card .val{font-size:2rem;font-weight:800;font-family:var(--mono);color:var(--accent);}
+.result-card .sub-scale{font-size:.7rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--textdim);margin-bottom:6px;}
+.result-card .cls{font-size:.78rem;margin-top:6px;font-weight:700;}
+.cls-normal{color:var(--accent);}
+.cls-leve{color:var(--accent3);}
+.cls-moderado{color:#ff9800;}
+.cls-severo{color:var(--accent2);}
+.cls-extremo{color:var(--accent2);}
+.info-box{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:16px;font-size:.82rem;color:var(--textdim);line-height:1.7;margin-top:12px;}
+.info-box strong{color:var(--text);}
+
+/* Toast ── */
+.toast{position:fixed;bottom:24px;right:20px;background:var(--surface);border:1px solid var(--accent);color:var(--accent);padding:10px 18px;border-radius:8px;font-size:.82rem;font-weight:600;opacity:0;pointer-events:none;transform:translateY(6px);transition:all .25s;z-index:9999;}
+.toast.show{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div>
+    <h1>T-MIRIM</h1>
+    <div class="sub">DASS-21 — Escala de Depressão, Ansiedade e Estresse</div>
+  </div>
+  <div class="hdr-btns">
+    <button class="hbtn" id="btn-theme">☀ Claro</button>
+    <button class="hbtn" id="btn-back" onclick="history.back()">← Voltar</button>
+  </div>
+</header>
+<div class="progress-track"><div class="progress-bar" id="pbar"></div></div>
+<div class="progress-label" id="plabel"></div>
+
+<!-- ── SCREEN 1: Setup ────────────────────────────────────── -->
+<div class="screen active" id="screen-setup">
+  <div class="card">
+    <h2>Identificação do participante</h2>
+    <div class="row2">
+      <div class="field">
+        <label>Nome *</label>
+        <input type="text" id="setup-nome" placeholder="Nome completo">
+      </div>
+      <div class="field">
+        <label>Idade *</label>
+        <input type="number" id="setup-idade" placeholder="Anos" min="10" max="120">
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Gênero *</label>
+        <div class="rg" id="rg-genero">
+          <label class="ro"><input type="radio" name="s-genero" value="Masculino"> Masculino</label>
+          <label class="ro"><input type="radio" name="s-genero" value="Feminino"> Feminino</label>
+          <label class="ro"><input type="radio" name="s-genero" value="Outro"> Outro</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Data do teste</label>
+        <input type="date" id="setup-data">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Configuração do áudio</h2>
+    <div class="toggle-row" style="margin-bottom:16px;">
+      <label class="toggle">
+        <input type="checkbox" id="audio-enabled">
+        <span class="toggle-track"></span>
+        <span class="toggle-thumb"></span>
+      </label>
+      <span>Ativar leitura em áudio das perguntas</span>
+    </div>
+
+    <div id="audio-opts" style="display:none">
+      <div style="margin-bottom:14px;">
+        <div style="font-size:.75rem;font-weight:700;color:var(--textdim);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;">Voz do locutor</div>
+        <div class="rg">
+          <label class="ro"><input type="radio" name="voice-type" value="homem" checked> 🎙 Homem (Daniel)</label>
+          <label class="ro"><input type="radio" name="voice-type" value="mulher"> 🎙 Mulher (Lily)</label>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.75rem;font-weight:700;color:var(--textdim);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;">Gênero das perguntas</div>
+        <div class="rg">
+          <label class="ro"><input type="radio" name="q-gender" value="masculino" checked> Masculino</label>
+          <label class="ro"><input type="radio" name="q-gender" value="feminino"> Feminino</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Instruções</h2>
+    <p>Por favor, leia cada afirmação e indique o quanto ela se aplicou a você <strong>na semana passada</strong>.</p>
+    <p>Não há respostas certas ou erradas. Não gaste muito tempo em cada afirmação.</p>
+    <p>
+      <strong>0 — Nunca:</strong> não se aplicou a mim de forma alguma.<br>
+      <strong>1 — Às vezes:</strong> aplicou-se a mim em algum grau, ou algumas vezes.<br>
+      <strong>2 — Frequentemente:</strong> aplicou-se a mim em grau considerável, ou boa parte do tempo.<br>
+      <strong>3 — Quase sempre:</strong> aplicou-se muito a mim, ou na maior parte do tempo.
+    </p>
+    <p style="font-size:.78rem;margin-top:8px;color:var(--textsub);">
+      No computador: teclas <strong>1–4</strong> para responder, <strong>Espaço</strong> para avançar.
+    </p>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="startTest()">▶ Iniciar DASS-21</button>
+  </div>
+</div>
+
+<!-- ── SCREEN 2: Questions ────────────────────────────────── -->
+<div class="screen" id="screen-q">
+  <div class="q-num" id="q-num">Pergunta 1 de 21</div>
+  <div class="q-text" id="q-text">—</div>
+
+  <div class="answers">
+    <button class="answer-btn" id="a0" onclick="selectAnswer(0)">
+      <span class="a-key">1</span> Nunca
+    </button>
+    <button class="answer-btn" id="a1" onclick="selectAnswer(1)">
+      <span class="a-key">2</span> Às vezes
+    </button>
+    <button class="answer-btn" id="a2" onclick="selectAnswer(2)">
+      <span class="a-key">3</span> Frequentemente
+    </button>
+    <button class="answer-btn" id="a3" onclick="selectAnswer(3)">
+      <span class="a-key">4</span> Quase sempre
+    </button>
+  </div>
+
+  <div class="q-nav">
+    <button class="btn btn-secondary" id="btn-prev" onclick="prevQuestion()">← Anterior</button>
+    <span class="spacer"></span>
+    <div class="audio-indicator" id="audio-indicator" style="display:none">
+      <span class="audio-dot" id="audio-dot"></span>
+      <span id="audio-status">Áudio</span>
+    </div>
+    <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Próxima →</button>
+  </div>
+
+  <audio id="audio-player" style="display:none"></audio>
+</div>
+
+<!-- ── SCREEN 3: Results ──────────────────────────────────── -->
+<div class="screen" id="screen-results">
+  <div class="card">
+    <h2>Resultados DASS-21</h2>
+    <div style="font-size:.82rem;color:var(--textdim);margin-bottom:4px;" id="res-id"></div>
+
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="sub-scale">Depressão</div>
+        <div class="val" id="res-d-val">—</div>
+        <div class="cls" id="res-d-cls">—</div>
+      </div>
+      <div class="result-card">
+        <div class="sub-scale">Ansiedade</div>
+        <div class="val" id="res-a-val">—</div>
+        <div class="cls" id="res-a-cls">—</div>
+      </div>
+      <div class="result-card">
+        <div class="sub-scale">Estresse</div>
+        <div class="val" id="res-e-val">—</div>
+        <div class="cls" id="res-e-cls">—</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Referência:</strong> Lovibond, S.H.; Lovibond, P.F. (1995). 
+      <em>Manual for the Depression Anxiety Stress Scales</em> (2ª ed.). Psychology Foundation of Australia.<br><br>
+      <strong>Nota:</strong> Este instrumento não substitui avaliação clínica profissional.
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="resetTest()">↺ Novo teste</button>
+    <button class="btn btn-primary" onclick="exportCSV()">💾 Exportar CSV</button>
+  </div>
+</div>
+
+<div class="alert" id="alert-msg"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Theme ─────────────────────────────────────────────────
+const html = document.documentElement;
+const themeBtn = document.getElementById('btn-theme');
+if (localStorage.getItem('tmirim-theme') !== 'light') {
+  html.classList.remove('light');
+  themeBtn.textContent = '🌙 Escuro';
+}
+themeBtn.onclick = () => {
+  const light = html.classList.toggle('light');
+  themeBtn.textContent = light ? '☀ Claro' : '🌙 Escuro';
+  localStorage.setItem('tmirim-theme', light ? 'light' : 'dark');
+};
+
+// ── Prefill from localStorage ─────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('setup-nome').value   = localStorage.getItem('participantName') || '';
+  document.getElementById('setup-idade').value  = localStorage.getItem('participantAge')  || '';
+  document.getElementById('setup-data').value   = localStorage.getItem('testDate')        || new Date().toISOString().slice(0,10);
+
+  const storedGender = localStorage.getItem('participantGender') || '';
+  document.querySelectorAll('input[name="s-genero"]').forEach(r => {
+    if (r.value === storedGender || (storedGender && r.value === 'Outro' && storedGender !== 'Masculino' && storedGender !== 'Feminino')) {
+      r.checked = true;
+    }
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const nomeQ = params.get('nome');
+  if (nomeQ) document.getElementById('setup-nome').value = nomeQ;
+
+  document.getElementById('audio-enabled').addEventListener('change', e => {
+    document.getElementById('audio-opts').style.display = e.target.checked ? 'block' : 'none';
+  });
+});
+
+// ── Questions ─────────────────────────────────────────────
+const QUESTIONS = {
+  masculino: [
+    "Achei difícil me acalmar.",
+    "Senti minha boca seca.",
+    "Não consegui vivenciar nenhum sentimento positivo.",
+    "Tive dificuldade em respirar em alguns momentos (por exemplo respiração ofegante ou falta de ar — sem ter feito nenhum esforço físico).",
+    "Achei difícil ter iniciativa para fazer as coisas.",
+    "Tive a tendência de reagir de forma exagerada às situações.",
+    "Senti tremores (por exemplo — nas mãos).",
+    "Senti que estava sempre nervoso.",
+    "Preocupei-me com situações em que eu pudesse entrar em pânico e parecesse ridículo.",
+    "Senti que não tinha nada a desejar.",
+    "Senti-me agitado.",
+    "Achei difícil relaxar.",
+    "Senti-me depressivo ou sem ânimo.",
+    "Fui intolerante com as coisas que me impediam de continuar o que eu estava fazendo.",
+    "Senti que ia entrar em pânico.",
+    "Não consegui me entusiasmar com nada.",
+    "Senti que não tinha valor como pessoa.",
+    "Senti que estava um pouco emotivo ou sensível demais.",
+    "Sabia que meu coração estava alterado mesmo não tendo feito nenhum esforço físico (por exemplo aumento da frequência cardíaca ou disritmia cardíaca).",
+    "Senti medo sem motivo.",
+    "Senti que a vida não tinha sentido."
+  ],
+  feminino: [
+    "Achei difícil me acalmar.",
+    "Senti minha boca seca.",
+    "Não consegui vivenciar nenhum sentimento positivo.",
+    "Tive dificuldade em respirar em alguns momentos (por exemplo respiração ofegante ou falta de ar — sem ter feito nenhum esforço físico).",
+    "Achei difícil ter iniciativa para fazer as coisas.",
+    "Tive a tendência de reagir de forma exagerada às situações.",
+    "Senti tremores (por exemplo — nas mãos).",
+    "Senti que estava sempre nervosa.",
+    "Preocupei-me com situações em que eu pudesse entrar em pânico e parecesse ridícula.",
+    "Senti que não tinha nada a desejar.",
+    "Senti-me agitada.",
+    "Achei difícil relaxar.",
+    "Senti-me depressiva ou sem ânimo.",
+    "Fui intolerante com as coisas que me impediam de continuar o que eu estava fazendo.",
+    "Senti que ia entrar em pânico.",
+    "Não consegui me entusiasmar com nada.",
+    "Senti que não tinha valor como pessoa.",
+    "Senti que estava um pouco emotiva ou sensível demais.",
+    "Sabia que meu coração estava alterado mesmo não tendo feito nenhum esforço físico (por exemplo aumento da frequência cardíaca ou disritmia cardíaca).",
+    "Senti medo sem motivo.",
+    "Senti que a vida não tinha sentido."
+  ]
+};
+
+// ── Audio paths (4 combinations: homem/mulher × masculino/feminino) ───────────
+const BASE = 'https://ivanmoria.github.io/media/audio/audiosdass21/';
+const AUDIOS = {
+  homem_masculino: Array.from({length:21},(_,i)=>`${BASE}danielmasc/danm${i+1}.wav`),
+  homem_feminino: [
+    `${BASE}danielmasc/danm1.wav`,`${BASE}danielmasc/danm2.wav`,`${BASE}danielmasc/danm3.wav`,
+    `${BASE}danielmasc/danm4.wav`,`${BASE}danielmasc/danm5.wav`,`${BASE}danielmasc/danm6.wav`,
+    `${BASE}danielmasc/danm7.wav`,`${BASE}danielfem/danielfem1.wav`,`${BASE}danielfem/danielfem2.wav`,
+    `${BASE}danielmasc/danm10.wav`,`${BASE}danielfem/danielfem3.wav`,`${BASE}danielmasc/danm12.wav`,
+    `${BASE}danielfem/danielfem4.wav`,`${BASE}danielmasc/danm14.wav`,`${BASE}danielmasc/danm15.wav`,
+    `${BASE}danielmasc/danm16.wav`,`${BASE}danielmasc/danm17.wav`,`${BASE}danielfem/danielfem5.wav`,
+    `${BASE}danielmasc/danm19.wav`,`${BASE}danielmasc/danm20.wav`,`${BASE}danielmasc/danm21.wav`,
+  ],
+  mulher_masculino: [
+    `${BASE}lilyfem/lilyfem1.wav`,`${BASE}lilyfem/lilyfem2.wav`,`${BASE}lilyfem/lilyfem3.wav`,
+    `${BASE}lilyfem/lilyfem4.wav`,`${BASE}lilyfem/lilyfem5.wav`,`${BASE}lilyfem/lilyfem6.wav`,
+    `${BASE}lilyfem/lilyfem7.wav`,`${BASE}lilymasc/lilymasc8.wav`,`${BASE}lilymasc/lilymasc9.wav`,
+    `${BASE}lilyfem/lilyfem10.wav`,`${BASE}lilymasc/lilymasc11.wav`,`${BASE}lilyfem/lilyfem12.wav`,
+    `${BASE}lilymasc/lilymasc13.wav`,`${BASE}lilyfem/lilyfem14.wav`,`${BASE}lilyfem/lilyfem15.wav`,
+    `${BASE}lilyfem/lilyfem16.wav`,`${BASE}lilyfem/lilyfem17.wav`,`${BASE}lilymasc/lilymasc18.wav`,
+    `${BASE}lilyfem/lilyfem19.wav`,`${BASE}lilyfem/lilyfem20.wav`,`${BASE}lilyfem/lilyfem21.wav`,
+  ],
+  mulher_feminino: Array.from({length:21},(_,i)=>`${BASE}lilyfem/lilyfem${i+1}.wav`),
+};
+
+// ── DASS-21 subscale indices ──────────────────────────────
+const IDX = {
+  depressao: [2,4,9,12,15,16,20],
+  ansiedade: [1,3,6,8,14,18,19],
+  estresse:  [0,5,7,10,11,13,17],
+};
+
+// ── State ─────────────────────────────────────────────────
+let currentQ = 0;
+const answers = new Array(21).fill(undefined);
+let participantName = '', participantAge = '', participantGender = '', testDate = '';
+
+// ── Helpers ───────────────────────────────────────────────
+function showToast(msg, color) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.borderColor = color||'var(--accent)';
+  t.style.color = color||'var(--accent)'; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+function showAlert(msg) {
+  const a = document.getElementById('alert-msg');
+  a.textContent = msg; a.classList.add('show');
+  setTimeout(()=>a.classList.remove('show'), 2800);
+}
+function setScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function updateProgress() {
+  const answered = answers.filter(a=>a!==undefined).length;
+  const pct = Math.round((currentQ+1)/21*100);
+  document.getElementById('pbar').style.width = pct + '%';
+  document.getElementById('plabel').textContent = currentQ<21
+    ? `Pergunta ${currentQ+1} de 21 — ${answered} respondida${answered!==1?'s':''}`
+    : 'Concluído';
+}
+
+// ── Start test ────────────────────────────────────────────
+function startTest() {
+  participantName   = document.getElementById('setup-nome').value.trim();
+  participantAge    = document.getElementById('setup-idade').value.trim();
+  participantGender = document.querySelector('input[name="s-genero"]:checked')?.value || '';
+  testDate          = document.getElementById('setup-data').value;
+
+  if (!participantName) { showAlert('⚠ Informe o nome do participante'); return; }
+  if (!participantAge)  { showAlert('⚠ Informe a idade do participante'); return; }
+  if (!participantGender) { showAlert('⚠ Selecione o gênero'); return; }
+
+  localStorage.setItem('participantName',   participantName);
+  localStorage.setItem('participantAge',    participantAge);
+  localStorage.setItem('participantGender', participantGender);
+  localStorage.setItem('testDate',          testDate);
+
+  currentQ = 0; answers.fill(undefined);
+  setScreen('screen-q');
+  showQuestion();
+}
+
+// ── Show question ─────────────────────────────────────────
+function showQuestion() {
+  const qGender = document.querySelector('input[name="q-gender"]:checked')?.value || 'masculino';
+  const questions = QUESTIONS[qGender];
+
+  document.getElementById('q-num').textContent  = `Pergunta ${currentQ+1} de 21`;
+  document.getElementById('q-text').textContent = `${currentQ+1}. ${questions[currentQ]}`;
+  document.getElementById('btn-prev').style.visibility = currentQ > 0 ? 'visible' : 'hidden';
+  document.getElementById('btn-next').textContent = currentQ < 20 ? 'Próxima →' : 'Concluir ✓';
+
+  // Highlight saved answer
+  [0,1,2,3].forEach(i => {
+    document.getElementById('a'+i).classList.toggle('selected', answers[currentQ] === i);
+  });
+
+  updateProgress();
+  playAudio();
+}
+
+// ── Audio ─────────────────────────────────────────────────
+function playAudio() {
+  const enabled = document.getElementById('audio-enabled').checked;
+  const indicator = document.getElementById('audio-indicator');
+  indicator.style.display = enabled ? 'flex' : 'none';
+  if (!enabled) return;
+
+  const voice  = document.querySelector('input[name="voice-type"]:checked')?.value || 'homem';
+  const gender = document.querySelector('input[name="q-gender"]:checked')?.value   || 'masculino';
+  const key = `${voice}_${gender}`;
+  const src = AUDIOS[key]?.[currentQ];
+  if (!src) return;
+
+  const player = document.getElementById('audio-player');
+  const dot    = document.getElementById('audio-dot');
+  const status = document.getElementById('audio-status');
+
+  player.src = src;
+  dot.classList.add('playing');
+  status.textContent = 'Reproduzindo…';
+
+  player.play().catch(()=>{
+    dot.classList.remove('playing');
+    status.textContent = 'Áudio indisponível';
+  });
+  player.onended = () => {
+    dot.classList.remove('playing');
+    status.textContent = 'Áudio concluído';
+  };
+}
+
+// ── Answer ────────────────────────────────────────────────
+function selectAnswer(val) {
+  answers[currentQ] = val;
+  [0,1,2,3].forEach(i => document.getElementById('a'+i).classList.toggle('selected', i===val));
+}
+
+// ── Navigation ────────────────────────────────────────────
+function nextQuestion() {
+  if (answers[currentQ] === undefined) {
+    showAlert('Selecione uma resposta antes de continuar.');
+    playAudio();
+    return;
+  }
+  if (currentQ < 20) {
+    currentQ++;
+    showQuestion();
+  } else {
+    finishTest();
+  }
+}
+function prevQuestion() {
+  if (currentQ > 0) { currentQ--; showQuestion(); }
+}
+
+// ── Finish & classify ─────────────────────────────────────
+function classify(score, type) {
+  if (type === 'depressao') {
+    if (score < 10) return ['Normal','cls-normal'];
+    if (score <= 13) return ['Leve','cls-leve'];
+    if (score <= 20) return ['Moderado','cls-moderado'];
+    if (score <= 27) return ['Severo','cls-severo'];
+    return ['Extremamente Severo','cls-extremo'];
+  }
+  if (type === 'ansiedade') {
+    if (score < 8) return ['Normal','cls-normal'];
+    if (score <= 9) return ['Leve','cls-leve'];
+    if (score <= 14) return ['Moderado','cls-moderado'];
+    if (score <= 19) return ['Severo','cls-severo'];
+    return ['Extremamente Severo','cls-extremo'];
+  }
+  // estresse
+  if (score < 15) return ['Normal','cls-normal'];
+  if (score <= 18) return ['Leve','cls-leve'];
+  if (score <= 25) return ['Moderado','cls-moderado'];
+  if (score <= 33) return ['Severo','cls-severo'];
+  return ['Extremamente Severo','cls-extremo'];
+}
+
+function finishTest() {
+  const d = IDX.depressao.reduce((s,i)=>s+(answers[i]||0),0)*2;
+  const a = IDX.ansiedade.reduce((s,i)=>s+(answers[i]||0),0)*2;
+  const e = IDX.estresse.reduce((s,i)=>s+(answers[i]||0),0)*2;
+
+  document.getElementById('res-id').textContent =
+    `${participantName} · ${participantAge} anos · ${participantGender} · ${testDate}`;
+
+  const setResult = (prefix, score, type) => {
+    document.getElementById(`res-${prefix}-val`).textContent = score;
+    const [label, cls] = classify(score, type);
+    const el = document.getElementById(`res-${prefix}-cls`);
+    el.textContent = label; el.className = 'cls ' + cls;
+  };
+  setResult('d', d, 'depressao');
+  setResult('a', a, 'ansiedade');
+  setResult('e', e, 'estresse');
+
+  document.getElementById('pbar').style.width = '100%';
+  document.getElementById('plabel').textContent = '✓ Concluído';
+  setScreen('screen-results');
+}
+
+// ── Export CSV ────────────────────────────────────────────
+function exportCSV() {
+  const d = IDX.depressao.reduce((s,i)=>s+(answers[i]||0),0)*2;
+  const a = IDX.ansiedade.reduce((s,i)=>s+(answers[i]||0),0)*2;
+  const e = IDX.estresse.reduce((s,i)=>s+(answers[i]||0),0)*2;
+  const [dLabel] = classify(d,'depressao');
+  const [aLabel] = classify(a,'ansiedade');
+  const [eLabel] = classify(e,'estresse');
+
+  const rows = [
+    ['Pergunta','Resposta'],
+    ...answers.map((ans,i) => [i+1, ['Nunca','Às vezes','Frequentemente','Quase sempre'][ans] ?? 'Sem resposta']),
+    [],
+    ['Nome','Gênero','Idade','Data do Teste'],
+    [participantName, participantGender, participantAge, testDate],
+    [],
+    ['Escala','Score','Classificação'],
+    ['Depressão', d, dLabel],
+    ['Ansiedade', a, aLabel],
+    ['Estresse',  e, eLabel],
+  ];
+
+  const csv = rows.map(r => r.join(' ')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url  = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `DASS21_${testDate}_${participantName}.csv`;
+  document.body.appendChild(link); link.click(); document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  showToast('✓ CSV exportado!');
+}
+
+// ── Reset ─────────────────────────────────────────────────
+function resetTest() {
+  answers.fill(undefined);
+  currentQ = 0;
+  document.getElementById('pbar').style.width = '0%';
+  document.getElementById('plabel').textContent = '';
+  setScreen('screen-setup');
+}
+
+// ── Keyboard shortcuts ────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('screen-q').classList.contains('active')) return;
+  if (e.key >= '1' && e.key <= '4') selectAnswer(parseInt(e.key)-1);
+  if (e.key === ' ')  { e.preventDefault(); nextQuestion(); }
+  if (e.key === 'ArrowLeft')  prevQuestion();
+  if (e.key === 'ArrowRight') nextQuestion();
+});
+</script>
+</body>
+</html>
