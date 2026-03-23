@@ -1,15 +1,17 @@
-# T-MIRIM | Musicoterapia
+# T-MIRIM | Ivan Moriá Borges.
 
-Sistema de análise rítmica e coleta de dados para musicoterapia.
+Sistema de análise rítmica e coleta de dados para musicoterapia desenvolvido como projeto de doutorado em Música na UFMG. 2026.
 
 ## Estrutura
 
 ```
-tmirim-app/
+app/
 ├── index.html              ← Entrada principal (abrir no navegador)
 ├── formulario.html         ← Formulário standalone (anamnese)
 ├── dass21.html             ← DASS-21 standalone
 ├── README.md
+├── src.json                ← Prévia de dados
+├── src.json.gz             ← Prévia de dados (compactado)
 ├── css/
 │   └── app.css             ← Estilos completos
 └── js/
@@ -36,22 +38,11 @@ tmirim-app/
 
 ## Como usar
 
-Precisa de um servidor local (CORS):
+Online pelo navegador, com um sistema de uso gratuito por um período limitado.
 
-```bash
-# Python
-cd tmirim-app && python3 -m http.server 8080
-# Acesse: http://localhost:8080
-
-# Node.js
-npx serve tmirim-app
-
-# VS Code: instale "Live Server" e clique em "Go Live"
-```
 
 ## Funcionalidades
 
-- **Sidebar colapsável** — botão ◀ no rodapé recolhe o menu
 - **Formulários** — TCLE com assinatura digital + PDF, Anamnese completa, DASS-21 com 4 combinações de áudio
 - **Análise rítmica** — processamento de CSVs MIDI, boxplots, séries temporais, correlações
 - **DASS-21** — análise e visualização dos dados coletados
