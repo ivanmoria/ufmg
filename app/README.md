@@ -1,4 +1,4 @@
-# T-MIRIM | Ivan Moriá Borges.
+
 
 Sistema de análise rítmica e coleta de dados para musicoterapia desenvolvido como projeto de doutorado em Música na UFMG. 2026.
 
