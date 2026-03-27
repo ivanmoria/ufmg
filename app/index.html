@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>T-MIЯIM</title>
+<title>T-MIRIM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/welcome.css">
@@ -612,6 +612,10 @@
               <div style="font-size:.6rem;color:var(--textdim);letter-spacing:.05em;margin-bottom:4px">MAE RÍTMICO</div>
               <div id="pd-rhythm-radar" style="width:180px;height:180px"></div>
             </div>
+            <div style="text-align:center">
+              <div style="font-size:.6rem;color:var(--textdim);letter-spacing:.05em;margin-bottom:4px">FASE · <span style="color:#ffcc44">+atraso</span> <span style="color:#7b8cff">−antecipa</span></div>
+              <div id="pd-phase-radar" style="width:180px;height:180px"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -623,9 +627,9 @@
       <div id="pd-activity-plot"></div>
     </div>
 
-    <!-- Correlação DASS × Atividades -->
+    <!-- Atraso/Antecipação × MAE × TTE por atividade -->
     <div class="pd-section">
-      <div class="pd-section-title">Correlação DASS × Desempenho</div>
+      <div class="pd-section-title">Perfil por Atividade · Fase &amp; MAE</div>
       <div id="pd-corr-plot"></div>
       <div id="pd-corr-text" style="font-size:.75rem;color:var(--textdim);margin-top:8px;line-height:1.6"></div>
     </div>
@@ -636,6 +640,11 @@
       <div class="table-wrap" style="max-height:220px">
         <table><thead><tr id="pd-table-head"></tr></thead><tbody id="pd-table-body"></tbody></table>
       </div>
+    </div>
+
+    <!-- Equações & Editor de Código -->
+    <div class="pd-section" id="pd-eq-section">
+      <!-- populated by _renderEqEditor() -->
     </div>
 
     <!-- Glossário -->
@@ -1558,7 +1567,7 @@
 
         <!-- Footer -->
         <div style="font-size:.72rem;color:#666;margin-top:20px;line-height:1.6;border-top:1px solid #ddd;padding-top:12px">
-          Caso tenha alguma dúvida sobre a pesquisa, o(a) sr(a). poderá entrar em contato com o coordenador responsável pelo estudo: Ivan Moriá Borges Rodrigues, na Escola de Música da UFMG (31-3409-4700), e-mail ivanmoriabr@gmail.com, telefone (31) 9 8466 7554. Em caso de dúvidas éticas: COEP/UFMG — Av. Presidente Antônio Carlos, 6627, Pampulha - BH/MG, coep@prpq.ufmg.br, (31) 3409-4592.
+          Caso tenha alguma dúvida sobre a pesquisa, o(a) sr(a). poderá entrar em contato com o coordenador responsável pelo estudo: Ivan Moriá Borges Rodrigues, na Escola de Música da UFMG (31-3409-4700), e-mail <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d2bba4b3bcbfbda0bbb3b0a092b5bfb3bbbefcb1bdbf">[email&#160;protected]</a>, telefone (31) 9 8466 7554. Em caso de dúvidas éticas: COEP/UFMG — Av. Presidente Antônio Carlos, 6627, Pampulha - BH/MG, <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c7f73796c5c6c6e6c6d32697a717b327e6e">[email&#160;protected]</a>, (31) 3409-4592.
         </div>
       </div>
 
@@ -2091,7 +2100,7 @@
 
 <!-- Core -->
 <!-- Google Identity Services — para login com Google -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <script src="js/core/state.js"></script>
 <script src="js/core/utils.js"></script>
@@ -2249,9 +2258,7 @@
         <button onclick="(function(){var k=['ivanmoriabr','gmail.com'].join('@');navigator.clipboard.writeText(k).then(function(){var b=event.currentTarget;var o=b.textContent;b.textContent='✓';setTimeout(function(){b.textContent=o;},2500)})})()"
           style="background:rgba(61,219,168,.15);border:1px solid rgba(61,219,168,.4);border-radius:6px;color:#3ddba8;font-family:'DM Mono',monospace;font-size:.7rem;padding:5px 10px;cursor:pointer;flex-shrink:0">⎘ Copiar</button>
       </div>
-      <a id="pm-email-comprovante"
-        href="mailto:ivanmoriabr@gmail.com?subject=T-MIRIM%20%E2%80%94%20PIX&body=T-MIRIM%20%E2%80%94%20PIX%0A%0A[Anexe%20o%20comprovante]"
-        style="display:block;text-align:center;background:linear-gradient(135deg,#3ddba8,#2bc49a);color:#0b0d13;border-radius:8px;font-family:'DM Mono',monospace;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;padding:11px;text-decoration:none;font-weight:700">✉ Enviar comprovante</a>
+      <a id="pm-email-comprovante" href="/cdn-cgi/l/email-protection#701906111e1d1f021911120230171d11191c5e131f1d4f0305121a1513044d245d3d3922393d55424055354255484055494455424020392856121f14094d245d3d3922393d5542405535425548405549445542402039285540315540312b311e1508155542401f554240131f1d00021f06111e04152d" style="display:block;text-align:center;background:linear-gradient(135deg,#3ddba8,#2bc49a);color:#0b0d13;border-radius:8px;font-family:'DM Mono',monospace;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;padding:11px;text-decoration:none;font-weight:700">✉ Enviar comprovante</a>
     </div>
     <!-- Internacional -->
     <div style="border:1px solid rgba(123,140,255,.3);border-radius:10px;padding:14px">
@@ -2259,20 +2266,4 @@
       <div style="display:flex;gap:8px">
         <a href="https://wise.com/pay/me/ivanm4098" target="_blank" rel="noopener"
           style="flex:1;text-align:center;padding:10px;border:1px solid rgba(123,140,255,.4);border-radius:8px;font-family:'DM Mono',monospace;font-size:.78rem;color:#7b8cff;text-decoration:none;background:rgba(123,140,255,.06)">↗ Wise</a>
-        <a href="https://www.paypal.com/donate?business=ivanmoriabr%40gmail.com&currency_code=USD" target="_blank" rel="noopener"
-          style="flex:1;text-align:center;padding:10px;border:1px solid rgba(123,140,255,.4);border-radius:8px;font-family:'DM Mono',monospace;font-size:.78rem;color:#7b8cff;text-decoration:none;background:rgba(123,140,255,.06)">↗ PayPal</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-function toggleProfileModal() {
-  var m = document.getElementById('profile-modal');
-  if (!m) return;
-  m.classList.toggle('open');
-}
-</script>
-
-</body>
-</html>
+        <a href="https://www.paypal.com/donate?business=ivanmoriabr%40gmail.com&currency_code=USD" target="_b
